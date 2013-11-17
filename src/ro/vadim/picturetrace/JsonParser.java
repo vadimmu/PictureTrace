@@ -20,17 +20,10 @@ public class JsonParser {
     
     
     
-    private JsonParser(){                
+    public JsonParser(){                
             mapper = new ObjectMapper();                
     }        
     
-    public static JsonParser getParser(){
-            
-            if(parser == null)
-                    parser = new JsonParser();
-            
-            return parser;                
-    }
     
     
     public Map<String, Object> extractObject(String message){
