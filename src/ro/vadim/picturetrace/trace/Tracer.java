@@ -1,14 +1,18 @@
-package ro.vadim.picturetrace;
+package ro.vadim.picturetrace.trace;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import ro.vadim.picturetrace.utils.GlobalData;
+import ro.vadim.picturetrace.utils.Picture;
 
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 
 public class Tracer {
@@ -27,21 +31,23 @@ public class Tracer {
 	private LocationManager locationManager = null;
 	private LocationListener locationListener = null;
 	private JsonParser parser = null;
+	private TracerService tracerService = null;
+	
+	
+	private Location lastLocation = null;
+	private Picture lastPicture = null;
 	
 	
 	
-	private Location previousLocation = null;
-	private Picture previousPicture = null;
 	
 	
-	
-	
-	
-	public Tracer() {
+	public Tracer(TracerService tracerService) {
+		
+		setTracerService(tracerService);
 		
 		parser = new JsonParser();
 		
-		locationManager = (LocationManager) GlobalData.getActivity().
+		locationManager = (LocationManager) tracerService.
 				getSystemService(Context.LOCATION_SERVICE);
 		
 		locationListener = new LocationListener() {
@@ -67,24 +73,49 @@ public class Tracer {
 			@Override
 			public void onLocationChanged(Location location) {
 				
-				if(previousLocation == null){
-					previousLocation = location;					
-					previousPicture = getFirstPicture(location);					
+				if(getLastLocation() == null){
+					setLastLocation(location);					
+					setLastPicture(getFirstPicture(location));					
 				}
+								
+				else if(getDistanceBetweenPositions(location, getLastLocation()) >= DEFAULT_PICTURE_TRACE_DISTANCE){
+					
+					Log.i("Tracer", "LocationListener.onLocationChanged(): LOCATION CHANGED !");
+					
+					setLastLocation(location);
+					setLastPicture(getFirstPicture(location));
+					getTracerService().getTraceThread().notify();
+				}				
 			}
 		};
-		
-		
 	}
 	
 	
 	
 	
 	
+	public static double getDistanceBetweenPositions(Location position1, Location position2){
+		
+		if((position1 != null)&&(position2 != null))
+			return getDistanceBetweenPositions(
+					position1.getLatitude(), position1.getLongitude(),
+					position2.getLatitude(), position2.getLongitude()); 
+		
+		return -1;		
+	}
+	
+	public static double getDistanceBetweenPositions(double latitude1, double longitude1, double latitude2, double longitude2){
+
+		float [] results = new float[2];
+				
+		Location.distanceBetween(latitude1, longitude1, latitude2, longitude2, results);
+				
+		return (double)results[0];
+	}
 	
 	
 	
-	public double[] getPositionRanges(Location initialLocation, Integer offset){
+	private double[] getPositionRanges(Location initialLocation, Integer offset){
 		
 		if(offset == null)		
 			offset = DEFAULT_OFFSET;
@@ -108,7 +139,7 @@ public class Tracer {
 	
 	
 	
-	public String getResponseString(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude){
+	private String getResponseString(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude){
 		/* One minute approx= 1 mile*/
 		
 		
@@ -146,7 +177,7 @@ public class Tracer {
 		}		
 	}
 	
-	public ArrayList<Picture> getPictures(String responseString){
+	private ArrayList<Picture> getPictures(String responseString){
 		ArrayList<Picture> pictures = new ArrayList<Picture>(PICTURES_TO - PICTURES_FROM + 1);
 				
 		Map<String, Object> largeJSON = parser.extractObject(responseString);		
@@ -165,7 +196,7 @@ public class Tracer {
 		
 	}
 	
-	public Picture getFirstPicture(String responseString){
+	private Picture getFirstPicture(String responseString){
 		
 		ArrayList<Picture> pictures = getPictures(responseString);
 		if(pictures.size() > 0)
@@ -175,7 +206,7 @@ public class Tracer {
 		
 	}
 	
-	public Picture getFirstPicture(Location myLocation){
+	private Picture getFirstPicture(Location myLocation){
 		
 		double[] ranges = getPositionRanges(myLocation, null);
 		String responseString = getResponseString(
@@ -184,6 +215,39 @@ public class Tracer {
 		
 		return getFirstPicture(responseString);
 		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public TracerService getTracerService() {
+		return tracerService;
+	}
+
+	public void setTracerService(TracerService tracerService) {
+		this.tracerService = tracerService;
+	}
+
+	public Location getLastLocation() {
+		return lastLocation;
+	}
+	
+	public void setLastLocation(Location lastLocation) {
+		this.lastLocation = lastLocation;
+	}
+	
+	public Picture getLastPicture() {
+		return lastPicture;
+	}
+	
+	public void setLastPicture(Picture lastPicture) {
+		this.lastPicture = lastPicture;
 	}
 	
 	

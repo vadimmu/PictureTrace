@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    
+    android:id="@+id/testFragmentTop"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <EditText
+        android:id="@+id/textPictureURL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:text="http://mw2.google.com/mw-panoramio/photos/medium/65492916.jpg" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonGetPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textPictureURL"
+        android:layout_marginTop="72dp"
+        android:text="Get the picture" />
+    
+</RelativeLayout>

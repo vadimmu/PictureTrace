@@ -1,4 +1,4 @@
-package ro.vadim.picturetrace;
+package ro.vadim.picturetrace.trace;
 
 import java.util.ArrayList;
 import java.util.HashMap;

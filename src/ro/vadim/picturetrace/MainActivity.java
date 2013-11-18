@@ -1,15 +1,21 @@
 package ro.vadim.picturetrace;
 
+import ro.vadim.picturetrace.utils.GlobalData;
+import ro.vadim.picturetrace.visuals.TestFragment;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		GlobalData.initGlobal(this);
+		GlobalData.getFragmentManager().loadFragment(TestFragment.class.getCanonicalName(), null, null);
 	}
 
 	@Override
