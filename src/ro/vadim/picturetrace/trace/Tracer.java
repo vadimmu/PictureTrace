@@ -75,7 +75,7 @@ public class Tracer {
 				
 				if(getLastLocation() == null){
 					setLastLocation(location);					
-					setLastPicture(getFirstPicture(location));					
+					setLastPicture(getFirstPicture(location));
 				}
 								
 				else if(getDistanceBetweenPositions(location, getLastLocation()) >= DEFAULT_PICTURE_TRACE_DISTANCE){
@@ -117,9 +117,12 @@ public class Tracer {
 	
 	private double[] getPositionRanges(Location initialLocation, Integer offset){
 		
+		
 		if(offset == null)		
 			offset = DEFAULT_OFFSET;
-				
+		
+		Log.i("Tracer", "getPositionRanges(): offset = "+String.valueOf(offset));
+		
 		double [] ranges = new double[4];
 		
 		double offsetLatitude = initialLocation.getLatitude() + (offset / ONE_DEGREE); 
@@ -192,16 +195,20 @@ public class Tracer {
 			));
 		}
 		
-		return pictures;	
+		Log.i("Tracer", "getPictures(): "+String.valueOf(pictures.size())+" retrieved pictures");
+		return pictures;
 		
 	}
 	
 	private Picture getFirstPicture(String responseString){
 		
 		ArrayList<Picture> pictures = getPictures(responseString);
-		if(pictures.size() > 0)
+		if(pictures.size() > 0){
+			Log.i("Tracer", "getFirstPicture(): "+pictures.get(0).url);			
 			return pictures.get(0);
+		}
 		
+		Log.i("Tracer", "getFirstPicture(): NULL");
 		return null;
 		
 	}

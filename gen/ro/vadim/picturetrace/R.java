@@ -24,23 +24,17 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int TextView01=0x7f080007;
-        public static final int TextView02=0x7f080009;
-        public static final int action_settings=0x7f080010;
-        public static final int button1=0x7f08000a;
-        public static final int buttonGetPicture=0x7f08000f;
+        public static final int action_settings=0x7f08000a;
+        public static final int buttonGetPicture=0x7f080009;
+        public static final int buttonTrace=0x7f080004;
         public static final int defaultFragmentTop=0x7f080001;
+        public static final int labelTrace=0x7f080005;
         public static final int mainMenuFragmentTop=0x7f080003;
-        public static final int picturesFragmentTop=0x7f08000c;
-        public static final int testFragmentTop=0x7f08000d;
-        public static final int textPictureURL=0x7f08000e;
+        public static final int picturesFragmentTop=0x7f080006;
+        public static final int testFragmentTop=0x7f080007;
+        public static final int textPictureURL=0x7f080008;
         public static final int textView1=0x7f080002;
-        public static final int textView2=0x7f080005;
-        public static final int toggleButton1=0x7f080004;
-        public static final int toggleButton2=0x7f080006;
-        public static final int toggleButton3=0x7f080008;
         public static final int topContainer=0x7f080000;
-        public static final int webView1=0x7f08000b;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

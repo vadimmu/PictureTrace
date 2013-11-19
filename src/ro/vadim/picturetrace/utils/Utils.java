@@ -2,6 +2,11 @@ package ro.vadim.picturetrace.utils;
 
 import java.util.HashMap;
 
+import ro.vadim.picturetrace.trace.TracerService;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -63,7 +68,15 @@ public class Utils {
 	}
 	
 	
-	
+	public static boolean isTracerServiceRunning(Activity activity) {
+	    ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (TracerService.class.getName().equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 	
 	
 

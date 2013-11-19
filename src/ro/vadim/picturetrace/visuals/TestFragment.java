@@ -125,6 +125,9 @@ public class TestFragment extends BoilerplateFragment{
 		
 	    Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");		
 	    Uri contentUri = Uri.fromFile(newFile);
+	    
+	    Log.i("TestFragment", "galleryAddPic(): Picture URI: "+contentUri.toString());
+	    
 	    mediaScanIntent.setData(contentUri);
 	    this.getActivity().sendBroadcast(mediaScanIntent);
 	}
@@ -169,11 +172,20 @@ public class TestFragment extends BoilerplateFragment{
 
 	private File createImageFile() throws IOException {
 		// Create an image file name
-		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
 		
-		File albumF = getAlbumDir();	
-		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+		Date newDate = new Date();
+		
+		
+		
+		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+		String imageFileName = JPEG_FILE_PREFIX + timeStamp;
+		
+		Log.i("TestFragment", "createImageFile(): imageFileName: "+imageFileName);
+		
+		
+		File albumF = getAlbumDir();
+		File imageF = new File(albumF+"/"+imageFileName+JPEG_FILE_SUFFIX);
+		
 		
 		Log.i("TestFragment", "createImageFile(): album name: "+albumF.getCanonicalPath());
 		Log.i("TestFragment", "createImageFile(): image name: "+imageF.getCanonicalPath());
