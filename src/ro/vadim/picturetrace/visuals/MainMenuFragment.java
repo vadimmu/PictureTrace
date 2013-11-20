@@ -46,7 +46,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 			public void onClick(View v) {
 				if(buttonMockLocations.isChecked()){
 					if(mockLocationsThread == null){
-						mockLocationRunnable = new MockLocationRunnable();
+						mockLocationRunnable = new MockLocationRunnable(getActivity());
 						mockLocationsThread = new Thread(mockLocationRunnable);
 						mockLocationsThread.start();
 					}

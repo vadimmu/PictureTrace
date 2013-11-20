@@ -15,6 +15,8 @@ import java.util.Observer;
 
 
 
+import ro.vadim.picturetrace.test.MockLocationProvider;
+import ro.vadim.picturetrace.test.MockLocationRunnable;
 import ro.vadim.picturetrace.utils.Picture;
 import ro.vadim.picturetrace.utils.Utils;
 import android.app.Service;
@@ -39,7 +41,7 @@ public class TracerService extends Service{
 	private static final String DEFAULT_ALBUM_NAME = "PictureTrace";
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
-	private final int DEFAULT_PICTURE_TRACE_DISTANCE = 100; //meters
+	private final int DEFAULT_PICTURE_TRACE_DISTANCE = 10; //meters
 	private final int DEFAULT_OFFSET = 50; //meters
 	private final int EARTH_RADIUS = 6378137; //meters
 	private final int ONE_DEGREE = 111111; //meters	
@@ -74,6 +76,13 @@ public class TracerService extends Service{
 	
 	private LinkedList<Picture> pictures = null;	
 	
+	/////
+	Thread mockLocationsThread = null;
+	MockLocationRunnable mockLocationRunnable = null;	
+	/////
+	
+	
+	
 	
 	private void broadcastIntentNewPicture(Picture picture){
 				
@@ -91,6 +100,25 @@ public class TracerService extends Service{
 	
 	private void initPictureRetrieval(){
 		
+		//////////TEST ////////////
+		
+		
+		mockLocationRunnable = new MockLocationRunnable(this);
+		mockLocationsThread = new Thread(mockLocationRunnable);
+		mockLocationsThread.start();
+		
+		
+		
+		/////////////////////////////
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		Log.i("TracerService", "initPictureRetrieval()");
 				
 		parser = new JsonParser();
@@ -98,7 +126,8 @@ public class TracerService extends Service{
 		
 		locationManager = (LocationManager) getApplicationContext().
 				getSystemService(Context.LOCATION_SERVICE);
-
+		
+		
 				
 		final TracerService thisService = this;
 		
@@ -124,45 +153,67 @@ public class TracerService extends Service{
 			
 			@Override
 			public void onLocationChanged(Location location) {
-				
-				
+								
 				Log.i("TracerService", "LocationListener.onLocationChanged(): LOCATION CHANGED !");
-				
+				Log.i("TracerService", "new location: "+String.valueOf(location.getLatitude())+", "+String.valueOf(location.getLongitude()));
 				Toast.makeText(thisService, "TracerService: location changed !", Toast.LENGTH_SHORT);
 				
 				if(getLastLocation() == null){
-					setLastLocation(location);					
-					setLastPicture(getFirstPicture(location));
+					Log.i("TracerService", "LastLocation = null !");
+					
 				}
-								
+				
 				else if(getDistanceBetweenPositions(location, getLastLocation()) >= DEFAULT_PICTURE_TRACE_DISTANCE){
-					try {
-						Log.i("TracerService", "LocationListener.onLocationChanged(): location changed and satisfies the distance crieria!");
 						
-						setLastLocation(location);
-						setLastPicture(getFirstPicture(location));
-						pictures.add(lastPicture);
-						File pictureFile = createImageFile();							
-						httpRequester.getPicture(lastPicture.url, pictureFile);	
-						galleryAddPic(pictureFile);
-					}
+					Log.i("TracerService", "LocationListener.onLocationChanged(): location changed and satisfies the distance crieria!");
 					
-					catch (IOException e) {
-						Log.i("TracerService", "traceRunnable.createImageFile(): IOException: "+e.toString());
-						e.printStackTrace();
-					}
+					final Location thisLocation = location;
+					Thread retrievePictureThread = new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							try {							
+								
+								Picture picture = getFirstPicture(thisLocation);
+								if(picture == null){
+									Log.i("TracerService", "onLocationChanged(): no picture available for this location !");
+									return;
+								}
+								
+								Log.i("TracerService", "GOT PICTURE !");
+								Log.i("TracerService", picture.url);
+								Log.i("TracerService", String.valueOf(picture.latitude)+" "+String.valueOf(picture.longitude));
+								
+								setLastPicture(picture);
+								pictures.add(picture);
+								File pictureFile = createImageFile();							
+								httpRequester.getPicture(picture.url, pictureFile);								
+								galleryAddPic(pictureFile);
+							}
+							catch (IOException e) {
+								Log.i("TracerService", "traceRunnable.createImageFile(): IOException: "+e.toString());
+								e.printStackTrace();
+							}
+						}
+					});
 					
-				}				
+					retrievePictureThread.start();
+				}
+				
+				setLastLocation(location);
 			}
 		};
-		
-		
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
+				
+		// MockLocationProvider is set as LocationManager.NETWORK_PROVIDER
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
 				minTimeMillis, 
 				minDistanceMeters,
 				locationListener);
 		
-		
+		Location lastLocation = locationManager.getLastKnownLocation(MockLocationProvider.providerName);
+		if(lastLocation != null)
+			Log.i("TracerService", "initPictureRetrieval(): last known location: "+String.valueOf(lastLocation));
 		
 	}
 		
@@ -207,7 +258,11 @@ public class TracerService extends Service{
 	
 	
 	@Override
-	public void onDestroy() {		
+	public void onDestroy() {
+		if(mockLocationsThread != null){
+			if(mockLocationsThread.isAlive())
+				mockLocationRunnable.setStopped(true);
+		}		
 		Toast.makeText(this, "TracerService has been destroyed", Toast.LENGTH_LONG).show();
 	}
 	
@@ -216,7 +271,7 @@ public class TracerService extends Service{
 	
 	
 	
-	
+		
 	
 	private void galleryAddPic(File newFile) {
 		
@@ -374,9 +429,11 @@ public class TracerService extends Service{
 	private String getResponseString(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude){
 		/* One minute approx= 1 mile*/
 		
+		if(httpRequester == null)
+			httpRequester = new HttpRequester();
 		
-		HttpRequester requester = new HttpRequester();
 		
+		Log.i("TracerService", "getResponseString()");
 		
 		String minLatitudeString = String.valueOf(minLatitude);
 		String maxLatitudeString = String.valueOf(maxLatitude);
@@ -398,7 +455,7 @@ public class TracerService extends Service{
 		
 		
 		try {
-			return requester.sendGet(url);
+			return httpRequester.sendGet(url);
 		}
 		
 		
@@ -419,14 +476,13 @@ public class TracerService extends Service{
 			pictures.add(new Picture(
 					(String)photo.get("photo_file_url"),
 					(String)photo.get("photo_title"),
-					Double.valueOf((String)photo.get("latitude")),
-					Double.valueOf((String)photo.get("longitude"))
+					(Double)photo.get("latitude"),
+					(Double)photo.get("longitude")
 			));
 		}
 		
 		Log.i("Tracer", "getPictures(): "+String.valueOf(pictures.size())+" retrieved pictures");
-		return pictures;
-		
+		return pictures;		
 	}
 	
 	private Picture getFirstPicture(String responseString){

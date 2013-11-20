@@ -62,15 +62,60 @@ public class HttpRequester {
         
         finally{
         	return returnMessage;
-        }            
+        }         
     }
     
     
     
+    public void getPicture(String url, File pictureFile){
+    	String returnMessage = "";
+        
+        try {
+        	
+            if(httpClient == null)
+                    httpClient = new DefaultHttpClient();
+            
+            httpGet = new HttpGet(url);
+            
+            HttpResponse response = httpClient.execute(httpGet);
+            
+            int responseCode = response.getStatusLine().getStatusCode();
+            
+            Log.i("HttpRequester", "getPicture: response code: "+String.valueOf(responseCode));
+            
+            byte[] buffer = new byte[512];
+    		BufferedInputStream in = new BufferedInputStream(response.getEntity().getContent());
+    		int bytesRead = in.read(buffer);    		
+    		
+    		FileOutputStream out = new FileOutputStream(pictureFile);
+    		
+    		while (bytesRead != -1) {
+    			out.write(buffer);
+    			buffer = new byte[512];
+    			bytesRead = in.read(buffer);
+    		}
+    		
+    		
+    		in.close();
+    		out.close();
+            
+        }
+        
+        catch(ClientProtocolException e) {
+            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+        }
+        
+        catch(IOException e) {
+            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+        }
+        
+        catch(Exception e){
+            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+        }
+    }
     
     
-    
-	public void getPicture(String url, File pictureFile) throws IOException{
+	public void getPicture_Aux(String url, File pictureFile) throws IOException{
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

@@ -1,6 +1,7 @@
 package ro.vadim.picturetrace.test;
 
 import ro.vadim.picturetrace.utils.GlobalData;
+import android.content.Context;
 import android.location.LocationManager;
 import android.util.Log;
 
@@ -8,11 +9,23 @@ public class MockLocationRunnable implements Runnable{
 	private int SLEEP_TIME = 1000; 
 	private boolean stopped = false;
 	private MockLocationProvider mock = null;
+	private Context ctx = null;
+	
+	
+	public MockLocationRunnable(Context context) {
+		this.ctx = context;
+	}
+	
+	
+	
+	
 	
 	@Override
 	public void run() {
 		
-		mock = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, GlobalData.getActivity());		
+		Log.e("MockLocationRunnable", "run()");
+		
+		mock = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, ctx);		
 		
 		while(!isStopped()){
 			
@@ -45,6 +58,7 @@ public class MockLocationRunnable implements Runnable{
 
 
 	public void setStopped(boolean stopped) {
+		Log.e("MockLocationRunnable", "setStopped( "+String.valueOf(stopped)+" )");
 		this.stopped = stopped;
 	}
 

@@ -3,26 +3,32 @@ package ro.vadim.picturetrace.test;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.SystemClock;
+import android.util.Log;
 
 public class MockLocationProvider {
 	
-	String providerName;
+	public static String providerName;
+	Location completeLocationObject = null;
 	Context ctx;
 	
 	public double testMinLatitude = 44.466360;
-	public double testMaxLatitude = 44.468243;	
-	
-	public double testMinLongitude = 26.065076;
-	public double testMaxLongitude = 26.060439;
+	public double testMaxLatitude = 49.175882;
+		
+	public double testMinLongitude = 0;
+	public double testMaxLongitude = 26.065076;
 	
 	
  
 	public MockLocationProvider(String name, Context ctx) {
 		this.providerName = name;
 		this.ctx = ctx;
-	 
+		
 		LocationManager lm = (LocationManager) ctx.getSystemService(
 	    Context.LOCATION_SERVICE);
+		
+		completeLocationObject = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		
 	    lm.addTestProvider(providerName, false, false, false, false, false,
 	      true, true, 0, 5);
 	    lm.setTestProviderEnabled(providerName, true);
@@ -46,13 +52,20 @@ public class MockLocationProvider {
 
 	public void pushLocation(double lat, double lon) {
 	    LocationManager lm = (LocationManager) ctx.getSystemService(
-	      Context.LOCATION_SERVICE);
-	 
+	      Context.LOCATION_SERVICE);	    
+	    
 	    Location mockLocation = new Location(providerName);
+	    	    
+	    mockLocation.setProvider(providerName);
+	    mockLocation.setAltitude(100);
+	    mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+	    
 	    mockLocation.setLatitude(lat);
 	    mockLocation.setLongitude(lon);
-	    mockLocation.setAltitude(0);
-	    mockLocation.setTime(System.currentTimeMillis());
+	    	    
+	    mockLocation.setTime(System.currentTimeMillis());	    
+	    mockLocation.setAccuracy(10);
+	    
 	    lm.setTestProviderLocation(providerName, mockLocation);
 	}
 	 
