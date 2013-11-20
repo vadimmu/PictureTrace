@@ -2,6 +2,7 @@ package ro.vadim.picturetrace.visuals;
 
 
 import ro.vadim.picturetrace.R;
+import ro.vadim.picturetrace.test.MockLocationRunnable;
 import ro.vadim.picturetrace.trace.TracerService;
 import ro.vadim.picturetrace.utils.GlobalData;
 import ro.vadim.picturetrace.utils.Utils;
@@ -15,10 +16,12 @@ import android.widget.ToggleButton;
 
 public class MainMenuFragment extends BoilerplateFragment{
 
-	ToggleButton buttonTrace = null;
+	ToggleButton buttonTrace = null;	
+	ToggleButton buttonMockLocations = null;	
 	Button buttonCheckTracerService = null;
 	
-	
+	Thread mockLocationsThread = null;
+	MockLocationRunnable mockLocationRunnable = null;
 	
 	
 
@@ -32,6 +35,48 @@ public class MainMenuFragment extends BoilerplateFragment{
 	}
 	
 	
+	
+	
+	private void initButtonMockLocations(View view){
+		final View thisView = view;
+		buttonMockLocations = (ToggleButton) view.findViewById(R.id.buttonMockLocations);
+		buttonMockLocations.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(buttonMockLocations.isChecked()){
+					if(mockLocationsThread == null){
+						mockLocationRunnable = new MockLocationRunnable();
+						mockLocationsThread = new Thread(mockLocationRunnable);
+						mockLocationsThread.start();
+					}
+					
+					if(!mockLocationsThread.isAlive()){						
+						mockLocationsThread.start();
+					}
+					else{
+						Log.i("MainMenuFragment", "mockLocationsThread is already running !");						
+					}
+				}
+					
+				else{
+					if(mockLocationsThread == null)
+						return;
+					
+					if(mockLocationsThread.isAlive()){
+						Log.i("MainMenuFragment", "stopping mockLocationRunnable");
+						mockLocationRunnable.setStopped(true);
+					}
+					else{
+						Log.i("MainMenuFragment", "mockLocationRunnable already stopped !");
+					}
+				}
+					
+				
+			}
+		});
+		
+	}
 	
 	private void initButtonCheckTracerService(View view){
 		final View thisView = view;
@@ -84,6 +129,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 		
 		initButtonTrace(view);
 		initButtonCheckTracerService(view);
+		initButtonMockLocations(view);
 	}
 
 	

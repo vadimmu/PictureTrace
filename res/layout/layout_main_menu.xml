@@ -5,24 +5,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <ToggleButton
-        android:id="@+id/buttonTrace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="184dp"
-        android:text="Trace" />
-
     <TextView
         android:id="@+id/labelTrace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/buttonTrace"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="46dp"
         android:text="Trace status"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/labelStartMockLocations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Start Mock Locations"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ToggleButton
+        android:id="@+id/buttonMockLocations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonTrace"
+        android:layout_below="@+id/labelStartMockLocations"
+        android:text="ToggleButton" />
 
     <Button
         android:id="@+id/buttonChecktTracerService"
@@ -36,10 +44,17 @@
         android:id="@+id/labelCheckTracerService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
+        android:layout_above="@+id/buttonChecktTracerService"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
-        android:text="Check if TracerService is running"
+        android:text="is TracerService running ?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ToggleButton
+        android:id="@+id/buttonTrace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Trace" />
     
 </RelativeLayout>

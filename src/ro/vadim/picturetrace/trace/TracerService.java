@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
@@ -43,6 +44,12 @@ public class TracerService extends Service{
 	private final int EARTH_RADIUS = 6378137; //meters
 	private final int ONE_DEGREE = 111111; //meters	
 	
+		
+	
+	private static long minTimeMillis = 2000;
+	private static long minDistanceMeters = 1;
+	private static float minAccuracyMeters = 200;
+	
 	
 	private final int PICTURES_FROM = 0;
 	private final int PICTURES_TO = 20;
@@ -59,8 +66,6 @@ public class TracerService extends Service{
 	
 		
 	private HttpRequester httpRequester = null;
-	private Runnable traceRunnable = null;
-	private Thread traceThread = null;
 	
 	
 	private boolean paused = false;
@@ -90,9 +95,11 @@ public class TracerService extends Service{
 				
 		parser = new JsonParser();
 		
+		
 		locationManager = (LocationManager) getApplicationContext().
 				getSystemService(Context.LOCATION_SERVICE);
-		
+
+				
 		final TracerService thisService = this;
 		
 		locationListener = new LocationListener() {
@@ -150,58 +157,31 @@ public class TracerService extends Service{
 		};
 		
 		
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
+				minTimeMillis, 
+				minDistanceMeters,
+				locationListener);
+		
+		
+		
 	}
 		
-	private void initTraceRunnable(){
+	
 		
-		Log.i("TracerService", "setting up traceRunnable");
-		traceRunnable = new Runnable() {
-			
-			@Override
-			public void run() {
-				Log.i("TracerService", "setting up picture retrieval");
-				initPictureRetrieval();					
-			}
-		};
-	}
-	
-	
 	private void init(){
 		
 		Log.i("TracerService", "init()");
 		pictures = new LinkedList<Picture>();
 		httpRequester = new HttpRequester();
-		//initPictureRetrieval();
-		initTraceRunnable();
-		setTraceThread(new Thread(traceRunnable));
+		initPictureRetrieval();		
 	}
 	
 	
 	public TracerService() {
 		
 		Log.i("TracerService", "service object initialized");
-		init();
-	}
-	
-	private void run(){
-		
-		Log.i("TracerService", "run()");		
-		traceThread.start();
 		
 	}
-	
-	public void stop(){
-		setStopped(true);
-		synchronized (traceThread) {
-			traceThread.notify();
-		}
-			
-	}
-	
-	
-	
-	
-	
 	
 	
 	
@@ -213,21 +193,21 @@ public class TracerService extends Service{
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {		
-		Toast.makeText(this, " TracerService has started", Toast.LENGTH_LONG).show();
-		run();
+		Toast.makeText(this, " TracerService has started", Toast.LENGTH_LONG).show();		
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
 	
 	@Override
-	public void onCreate() {		
-		Toast.makeText(this, "TracerService has been created", Toast.LENGTH_LONG).show();		
+	public void onCreate() {
+		super.onCreate();
+		Toast.makeText(this, "TracerService has been created", Toast.LENGTH_LONG).show();
+		init();		
 	}
 	
 	
 	@Override
-	public void onDestroy() {
-		stop();
+	public void onDestroy() {		
 		Toast.makeText(this, "TracerService has been destroyed", Toast.LENGTH_LONG).show();
 	}
 	
@@ -324,13 +304,6 @@ public class TracerService extends Service{
 	
 	
 	
-	public Thread getTraceThread() {
-		return traceThread;
-	}
-
-	public void setTraceThread(Thread traceThread) {
-		this.traceThread = traceThread;
-	}
 	
 	public boolean isPaused() {
 		return paused;
