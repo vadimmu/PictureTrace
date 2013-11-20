@@ -23,6 +23,7 @@
         
         <service 
             android:name="ro.vadim.picturetrace.trace.TracerService" 
+            android:process=":TracerService"
             android:exported="false"
             
             />

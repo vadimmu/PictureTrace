@@ -23,5 +23,23 @@
         android:layout_marginBottom="70dp"
         android:text="Trace status"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/buttonChecktTracerService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Check Tracer Service" />
+
+    <TextView
+        android:id="@+id/labelCheckTracerService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="Check if TracerService is running"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
     
 </RelativeLayout>

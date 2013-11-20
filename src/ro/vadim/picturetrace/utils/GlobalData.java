@@ -1,8 +1,6 @@
 package ro.vadim.picturetrace.utils;
 
 
-import ro.vadim.picturetrace.trace.Tracer;
-import ro.vadim.picturetrace.trace.TracerService;
 import ro.vadim.picturetrace.visuals.BoilerplateFragmentManager;
 import ro.vadim.picturetrace.visuals.FragmentManager;
 import android.app.Activity;
@@ -15,14 +13,13 @@ import android.util.Log;
 
 public class GlobalData {
 	
-	private static Activity activity = null;	
-	private static TracerService tracerService = null;
+	private static Activity activity = null;
+	
 	private static BoilerplateFragmentManager fragmentManager = null;
 	private static TracerServiceBroadcastReceiver broadcastReceiver = null;
 	private static IntentFilter intentFilter = null;
 	private static ServiceConnection serviceConnection = null;
-	
-	
+		
 	
 	private static void initServiceConnection(){
 		
@@ -40,6 +37,8 @@ public class GlobalData {
 	}
 	
 	public static void initGlobal(FragmentActivity activity){
+		
+				
 		if(getFragmentManager() == null)
 			setFragmentManager(new FragmentManager());
 		
@@ -51,10 +50,9 @@ public class GlobalData {
 			Log.i("GlogalData", "TracerService is running !");
 		}
 		
-		tracerService = new TracerService();
-		broadcastReceiver = new TracerServiceBroadcastReceiver();
-		intentFilter = new IntentFilter("ro.vadim.picturetrace.NewPicture");
-		//getActivity().registerReceiver(broadcastReceiver, intentFilter);
+		setBroadcastReceiver(new TracerServiceBroadcastReceiver());
+		setIntentFilter(new IntentFilter("ro.vadim.picturetrace.NewPicture"));
+		
 	}
 	
 	
@@ -76,6 +74,24 @@ public class GlobalData {
 	public static void setFragmentManager(BoilerplateFragmentManager fragmentManager) {
 		GlobalData.fragmentManager = fragmentManager;
 	}
+
+	public static TracerServiceBroadcastReceiver getBroadcastReceiver() {
+		return broadcastReceiver;
+	}
+
+	public static void setBroadcastReceiver(TracerServiceBroadcastReceiver broadcastReceiver) {
+		GlobalData.broadcastReceiver = broadcastReceiver;
+	}
+
+	public static IntentFilter getIntentFilter() {
+		return intentFilter;
+	}
+
+	public static void setIntentFilter(IntentFilter intentFilter) {
+		GlobalData.intentFilter = intentFilter;
+	}
+
+
 	
 
 }
