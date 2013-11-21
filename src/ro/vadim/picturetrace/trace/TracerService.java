@@ -43,6 +43,7 @@ public class TracerService extends Service{
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
 	private final int DEFAULT_PICTURE_TRACE_DISTANCE = 10; //meters
 	private final int DEFAULT_OFFSET = 50; //meters
+	private final double DEFAULT_OFFSET_DEGREES = 0.00045000045;
 	private final int EARTH_RADIUS = 6378137; //meters
 	private final int ONE_DEGREE = 111111; //meters	
 	
@@ -72,7 +73,7 @@ public class TracerService extends Service{
 	
 	private boolean paused = false;
 	private boolean stopped = false;
-	IBinder binder = new TracerBinder();	
+	
 	
 	private LinkedList<Picture> pictures = null;	
 	
@@ -82,20 +83,7 @@ public class TracerService extends Service{
 	/////
 	
 	
-	
-	
-	private void broadcastIntentNewPicture(Picture picture){
-				
-		Intent intent = new Intent();
-		intent.setAction("ro.vadim.picturetrace.NewPicture");
-		intent.putExtra("url", picture.url);
-		intent.putExtra("longitude", picture.longitude);
-		intent.putExtra("latitude", picture.latitude);
-		intent.putExtra("description", picture.description);		
-		sendBroadcast(intent);
-		
-	}
-	
+
 	
 	
 	private void initPictureRetrieval(){
@@ -159,15 +147,15 @@ public class TracerService extends Service{
 				Toast.makeText(thisService, "TracerService: location changed !", Toast.LENGTH_SHORT);
 				
 				if(getLastLocation() == null){
-					Log.i("TracerService", "LastLocation = null !");
-					
+					Log.i("TracerService", "LastLocation = null !");					
 				}
 				
 				else if(getDistanceBetweenPositions(location, getLastLocation()) >= DEFAULT_PICTURE_TRACE_DISTANCE){
-						
+					
 					Log.i("TracerService", "LocationListener.onLocationChanged(): location changed and satisfies the distance crieria!");
 					
 					final Location thisLocation = location;
+					
 					Thread retrievePictureThread = new Thread(new Runnable() {
 						
 						@Override
@@ -175,7 +163,8 @@ public class TracerService extends Service{
 							
 							try {							
 								
-								Picture picture = getFirstPicture(thisLocation);
+								Picture picture = getRandomPicture(thisLocation);
+																
 								if(picture == null){
 									Log.i("TracerService", "onLocationChanged(): no picture available for this location !");
 									return;
@@ -184,9 +173,7 @@ public class TracerService extends Service{
 								Log.i("TracerService", "GOT PICTURE !");
 								Log.i("TracerService", picture.url);
 								Log.i("TracerService", String.valueOf(picture.latitude)+" "+String.valueOf(picture.longitude));
-								
-								setLastPicture(picture);
-								pictures.add(picture);
+																
 								File pictureFile = createImageFile();							
 								httpRequester.getPicture(picture.url, pictureFile);								
 								galleryAddPic(pictureFile);
@@ -238,7 +225,7 @@ public class TracerService extends Service{
 	
 	@Override
 	public IBinder onBind(Intent intent) {
-		return binder;
+		return null;
 	}
 	
 	
@@ -399,24 +386,39 @@ public class TracerService extends Service{
 		return (double)results[0];
 	}
 	
+	
+	
+	private double[] getPositionRanges_DEFAULT_OFFSET_DEGREES(Location initialLocation){
+		
+		double [] ranges = new double[4];
+		
+		ranges[0] = initialLocation.getLatitude() - DEFAULT_OFFSET_DEGREES;
+		ranges[1] = initialLocation.getLongitude() - DEFAULT_OFFSET_DEGREES;
+				
+		ranges[2] = initialLocation.getLatitude() + DEFAULT_OFFSET_DEGREES;
+		ranges[3] = initialLocation.getLongitude() + DEFAULT_OFFSET_DEGREES;
+		
+		return ranges;
+		
+	}
+	
 	private double[] getPositionRanges(Location initialLocation, Integer offset){
 		
 		
 		if(offset == null)		
 			offset = DEFAULT_OFFSET;
-		
 		Log.i("Tracer", "getPositionRanges(): offset = "+String.valueOf(offset));
+		Log.i("Tracer", "getPositionRanges(): offset/ONE_DEGREE = "+String.valueOf((double)offset / ONE_DEGREE));
 		
 		double [] ranges = new double[4];
 		
-		double offsetLatitude = initialLocation.getLatitude() + (offset / ONE_DEGREE); 
-		double offsetLongitude = initialLocation.getLongitude() + (offset / ONE_DEGREE);
+		double degreeoffset =(double)offset / ONE_DEGREE;
+						
+		ranges[0] = initialLocation.getLatitude() - degreeoffset;
+		ranges[1] = initialLocation.getLongitude() - degreeoffset;
 				
-		ranges[0] = initialLocation.getLatitude() - offsetLatitude;
-		ranges[1] = initialLocation.getLatitude() + offsetLatitude;
-		
-		ranges[2] = initialLocation.getLongitude() - offsetLongitude;
-		ranges[3] = initialLocation.getLongitude() + offsetLongitude;
+		ranges[2] = initialLocation.getLatitude() + degreeoffset;
+		ranges[3] = initialLocation.getLongitude() + degreeoffset;
 		
 		return ranges;
 		
@@ -426,7 +428,7 @@ public class TracerService extends Service{
 	
 	
 	
-	private String getResponseString(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude){
+	private String getResponseString(double minLatitude, double minLongitude, double maxLatitude, double maxLongitude){
 		/* One minute approx= 1 mile*/
 		
 		if(httpRequester == null)
@@ -440,21 +442,24 @@ public class TracerService extends Service{
 		
 		
 		String minLongitudeString = String.valueOf(minLongitude);
-		String maxLongitudeString = String.valueOf(maxLatitude);
+		String maxLongitudeString = String.valueOf(maxLongitude);
+		
+		Log.i("TracerService", "getResponseString(): between "+minLatitudeString+", "+minLongitudeString+
+															" and "+maxLatitudeString+", "+maxLongitudeString);
 		
 		
 		String url = "http://www.panoramio.com/map/get_panoramas.php?"+
-		"set=public&"+
+		"set=full&"+
 		"from="+String.valueOf(PICTURES_FROM)+"&"+
 		"to="+String.valueOf(PICTURES_TO)+"&"+
-		"minx="+minLatitudeString+"&"+
-		"miny="+minLongitudeString+"&"+
-		"maxx="+maxLatitudeString+"&"+
-		"maxy="+maxLongitudeString+"&"+
+		"minx="+minLongitudeString+"&"+
+		"miny="+minLatitudeString+"&"+
+		"maxx="+maxLongitudeString+"&"+
+		"maxy="+maxLatitudeString+"&"+
 		"size=medium&mapfilter=true";
 		
-		
-		try {
+		Log.i("TracerService", "getResponseString(): request url: "+url);
+		try {			
 			return httpRequester.sendGet(url);
 		}
 		
@@ -467,18 +472,24 @@ public class TracerService extends Service{
 	}
 	
 	private ArrayList<Picture> getPictures(String responseString){
+		
+		Log.i("TracerService", "getPictures(): responseString: "+responseString);
+		
 		ArrayList<Picture> pictures = new ArrayList<Picture>(PICTURES_TO - PICTURES_FROM + 1);
 				
 		Map<String, Object> largeJSON = parser.extractObject(responseString);		
 		ArrayList<Map> photoData = parser.extractArrayOfObjects(largeJSON, "photos");
 		
-		for(Map photo : photoData){			
-			pictures.add(new Picture(
-					(String)photo.get("photo_file_url"),
-					(String)photo.get("photo_title"),
-					(Double)photo.get("latitude"),
-					(Double)photo.get("longitude")
-			));
+		if( photoData != null){
+			
+			for(Map photo : photoData){			
+				pictures.add(new Picture(
+						(String)photo.get("photo_file_url"),
+						(String)photo.get("photo_title"),
+						(Double)photo.get("latitude"),
+						(Double)photo.get("longitude")
+				));
+			}
 		}
 		
 		Log.i("Tracer", "getPictures(): "+String.valueOf(pictures.size())+" retrieved pictures");
@@ -500,6 +511,10 @@ public class TracerService extends Service{
 	
 	private Picture getFirstPicture(Location myLocation){
 		
+		Log.i("TracerService", "getFirstPicture(): location: "+
+				String.valueOf(myLocation.getLatitude())+ ", "+
+				String.valueOf(myLocation.getLongitude()));
+		
 		double[] ranges = getPositionRanges(myLocation, null);
 		String responseString = getResponseString(
 				ranges[0], ranges[1], 
@@ -509,7 +524,30 @@ public class TracerService extends Service{
 		
 	}
 	
+	private Picture getRandomPicture(String responseString){
+		ArrayList<Picture> pictures = getPictures(responseString);		
+		if(pictures.size() > 0){
+			
+			int index = (int)(Math.random()*pictures.size());			
+			Log.i("Tracer", "getFirstPicture(): "+pictures.get(index).url);			
+			return pictures.get(index);
+		}
+		Log.i("Tracer", "getRandomPicture(): NULL");
+		return null;
+	}
 	
+	private Picture getRandomPicture(Location myLocation){
+		Log.i("TracerService", "getFirstPicture(): location: "+
+				String.valueOf(myLocation.getLatitude())+ ", "+
+				String.valueOf(myLocation.getLongitude()));
+		
+		double[] ranges = getPositionRanges(myLocation, null);
+		String responseString = getResponseString(
+				ranges[0], ranges[1], 
+				ranges[2], ranges[3]);
+		
+		return getRandomPicture(responseString);		
+	}
 	
 	
 	
@@ -538,10 +576,4 @@ public class TracerService extends Service{
 	
 	
 	
-	
-	public class TracerBinder extends Binder {
-		public TracerService getTracerServiceInstance() {			
-			return TracerService.this;
-		}
-	}
 }

@@ -12,11 +12,13 @@ public class MockLocationProvider {
 	Location completeLocationObject = null;
 	Context ctx;
 	
-	public double testMinLatitude = 44.466360;
-	public double testMaxLatitude = 49.175882;
-		
-	public double testMinLongitude = 0;
-	public double testMaxLongitude = 26.065076;
+	
+	public double testMinLatitude = 25.076944;
+	public double testMaxLatitude = 25.079722;
+	
+	
+	public double testMinLongitude = 55.129444;
+	public double testMaxLongitude = 55.138889;
 	
 	
  
@@ -51,27 +53,41 @@ public class MockLocationProvider {
 	
 
 	public void pushLocation(double lat, double lon) {
-	    LocationManager lm = (LocationManager) ctx.getSystemService(
-	      Context.LOCATION_SERVICE);	    
 	    
-	    Location mockLocation = new Location(providerName);
-	    	    
-	    mockLocation.setProvider(providerName);
-	    mockLocation.setAltitude(100);
-	    mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-	    
-	    mockLocation.setLatitude(lat);
-	    mockLocation.setLongitude(lon);
-	    	    
-	    mockLocation.setTime(System.currentTimeMillis());	    
-	    mockLocation.setAccuracy(10);
-	    
-	    lm.setTestProviderLocation(providerName, mockLocation);
+		try{
+			LocationManager lm = (LocationManager) ctx.getSystemService(
+		      Context.LOCATION_SERVICE);	    
+		    
+		    Location mockLocation = new Location(providerName);
+		    	    
+		    mockLocation.setProvider(providerName);
+		    mockLocation.setAltitude(100);
+		    mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+		    
+		    mockLocation.setLatitude(lat);
+		    mockLocation.setLongitude(lon);
+		    	    
+		    mockLocation.setTime(System.currentTimeMillis());	    
+		    mockLocation.setAccuracy(10);
+		    
+		    lm.setTestProviderLocation(providerName, mockLocation);
+		}
+		catch(IllegalArgumentException e){
+			Log.e("MockLocationProvider", "pushLocation(): IllegalArgumentException: "+e.toString());
+			e.printStackTrace();
+		}
+		
 	}
 	 
 	public void shutdown() {
-	    LocationManager lm = (LocationManager) ctx.getSystemService(
-	      Context.LOCATION_SERVICE);
-	    lm.removeTestProvider(providerName);
+		try{
+		    LocationManager lm = (LocationManager) ctx.getSystemService(
+		      Context.LOCATION_SERVICE);
+		    lm.removeTestProvider(providerName);
+		}
+		catch(IllegalArgumentException e){
+			Log.e("MockLocationProvider", "shutdown(): IllegalArgumentException: "+e.toString());
+			e.printStackTrace();
+		}
 	}
 }

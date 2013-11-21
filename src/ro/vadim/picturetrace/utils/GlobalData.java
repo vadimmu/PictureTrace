@@ -19,7 +19,7 @@ public class GlobalData {
 	private static TracerServiceBroadcastReceiver broadcastReceiver = null;
 	private static IntentFilter intentFilter = null;
 	private static ServiceConnection serviceConnection = null;
-		
+	private static boolean initialized = false;	
 	
 	private static void initServiceConnection(){
 		
@@ -38,6 +38,8 @@ public class GlobalData {
 	
 	public static void initGlobal(FragmentActivity activity){
 		
+		if(isInitialized())
+			return;
 				
 		if(getFragmentManager() == null)
 			setFragmentManager(new FragmentManager());
@@ -52,7 +54,7 @@ public class GlobalData {
 		
 		setBroadcastReceiver(new TracerServiceBroadcastReceiver());
 		setIntentFilter(new IntentFilter("ro.vadim.picturetrace.NewPicture"));
-		
+		setInitialized(true);
 	}
 	
 	
@@ -89,6 +91,14 @@ public class GlobalData {
 
 	public static void setIntentFilter(IntentFilter intentFilter) {
 		GlobalData.intentFilter = intentFilter;
+	}
+
+	public static boolean isInitialized() {
+		return initialized;
+	}
+
+	public static void setInitialized(boolean initialized) {
+		GlobalData.initialized = initialized;
 	}
 
 

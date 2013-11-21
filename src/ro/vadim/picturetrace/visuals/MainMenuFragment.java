@@ -16,67 +16,34 @@ import android.widget.ToggleButton;
 
 public class MainMenuFragment extends BoilerplateFragment{
 
-	ToggleButton buttonTrace = null;	
-	ToggleButton buttonMockLocations = null;	
+	ToggleButton buttonTrace = null;
 	Button buttonCheckTracerService = null;
 	
-	Thread mockLocationsThread = null;
-	MockLocationRunnable mockLocationRunnable = null;
 	
 	
-
+	
+	
 	public void startTracerService(View view){
+		if(Utils.isTracerServiceRunning(getActivity())){
+			Log.i("MainMenuFragment", "startTracerService(): TracerService is already running");
+			return;
+		}
+			
 		getActivity().startService(new Intent(getActivity(), TracerService.class));
 	}
-	   	 
-	
+		
 	public void stopTracerService(View view){
+		if(!Utils.isTracerServiceRunning(getActivity())){
+			Log.i("MainMenuFragment", "stopTracerService(): TracerService is already stopped");
+			return;
+		}
+		
 		getActivity().stopService(new Intent(getActivity(), TracerService.class));
 	}
 	
 	
 	
 	
-	private void initButtonMockLocations(View view){
-		final View thisView = view;
-		buttonMockLocations = (ToggleButton) view.findViewById(R.id.buttonMockLocations);
-		buttonMockLocations.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(buttonMockLocations.isChecked()){
-					if(mockLocationsThread == null){
-						mockLocationRunnable = new MockLocationRunnable(getActivity());
-						mockLocationsThread = new Thread(mockLocationRunnable);
-						mockLocationsThread.start();
-					}
-					
-					if(!mockLocationsThread.isAlive()){						
-						mockLocationsThread.start();
-					}
-					else{
-						Log.i("MainMenuFragment", "mockLocationsThread is already running !");						
-					}
-				}
-					
-				else{
-					if(mockLocationsThread == null)
-						return;
-					
-					if(mockLocationsThread.isAlive()){
-						Log.i("MainMenuFragment", "stopping mockLocationRunnable");
-						mockLocationRunnable.setStopped(true);
-					}
-					else{
-						Log.i("MainMenuFragment", "mockLocationRunnable already stopped !");
-					}
-				}
-					
-				
-			}
-		});
-		
-	}
 	
 	private void initButtonCheckTracerService(View view){
 		final View thisView = view;
@@ -92,8 +59,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 			}
 		});
 	}
-	
-	
+		
 	private void initButtonTrace(View view){
 		
 		final View thisView = view;
@@ -128,8 +94,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 	public void initComponents(View view){
 		
 		initButtonTrace(view);
-		initButtonCheckTracerService(view);
-		initButtonMockLocations(view);
+		initButtonCheckTracerService(view);		
 	}
 
 	

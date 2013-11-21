@@ -83,20 +83,12 @@ public class HttpRequester {
             
             Log.i("HttpRequester", "getPicture: response code: "+String.valueOf(responseCode));
             
-            byte[] buffer = new byte[512];
-    		BufferedInputStream in = new BufferedInputStream(response.getEntity().getContent());
-    		int bytesRead = in.read(buffer);    		
-    		
+            
     		FileOutputStream out = new FileOutputStream(pictureFile);
-    		
-    		while (bytesRead != -1) {
-    			out.write(buffer);
-    			buffer = new byte[512];
-    			bytesRead = in.read(buffer);
-    		}
+    		response.getEntity().writeTo(out);
     		
     		
-    		in.close();
+    		
     		out.close();
             
         }
