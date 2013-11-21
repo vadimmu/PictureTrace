@@ -49,9 +49,6 @@ public class MockLocationProvider {
 		return latLong;
 	}
 	
-	
-	
-
 	public void pushLocation(double lat, double lon) {
 	    
 		try{

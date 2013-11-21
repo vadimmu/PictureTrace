@@ -87,10 +87,7 @@ public class HttpRequester {
     		FileOutputStream out = new FileOutputStream(pictureFile);
     		response.getEntity().writeTo(out);
     		
-    		
-    		
     		out.close();
-            
         }
         
         catch(ClientProtocolException e) {
