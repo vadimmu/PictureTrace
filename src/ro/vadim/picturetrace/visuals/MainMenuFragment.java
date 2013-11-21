@@ -28,8 +28,8 @@ public class MainMenuFragment extends BoilerplateFragment{
 			Log.i("MainMenuFragment", "startTracerService(): TracerService is already running");
 			return;
 		}
-			
-		getActivity().startService(new Intent(getActivity(), TracerService.class));
+		Intent serviceIntent = new Intent(getActivity(), TracerService.class);	
+		getActivity().startService(serviceIntent);
 	}
 		
 	public void stopTracerService(View view){
@@ -37,8 +37,8 @@ public class MainMenuFragment extends BoilerplateFragment{
 			Log.i("MainMenuFragment", "stopTracerService(): TracerService is already stopped");
 			return;
 		}
-		
-		getActivity().stopService(new Intent(getActivity(), TracerService.class));
+		Intent serviceIntent = new Intent(getActivity(), TracerService.class);
+		getActivity().stopService(serviceIntent);
 	}
 	
 	

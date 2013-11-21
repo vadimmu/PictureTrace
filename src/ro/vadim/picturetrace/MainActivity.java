@@ -20,13 +20,11 @@ public class MainActivity extends FragmentActivity {
 		GlobalData.initGlobal(this);
 		GlobalData.getFragmentManager().loadFragment(MainMenuFragment.class.getCanonicalName(), null, null);
 		
-		registerReceiver(GlobalData.getBroadcastReceiver(), GlobalData.getIntentFilter());
 	}
 	
 	@Override
 	protected void onDestroy() {		
-		super.onDestroy();
-		unregisterReceiver(GlobalData.getBroadcastReceiver());
+		super.onDestroy();		
 	}
 	
 

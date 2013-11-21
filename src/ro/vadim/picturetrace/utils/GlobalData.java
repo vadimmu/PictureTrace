@@ -15,45 +15,28 @@ public class GlobalData {
 	
 	private static Activity activity = null;
 	
-	private static BoilerplateFragmentManager fragmentManager = null;
-	private static TracerServiceBroadcastReceiver broadcastReceiver = null;
+	private static BoilerplateFragmentManager fragmentManager = null;	
 	private static IntentFilter intentFilter = null;
 	private static ServiceConnection serviceConnection = null;
 	private static boolean initialized = false;	
 	
-	private static void initServiceConnection(){
 		
-		serviceConnection = new ServiceConnection() {				
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				Log.i("GlobalData", "ServiceConenction disconnected");
-			}
-			
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				Log.i("GlobalData", "ServiceConenction connected");					
-			}
-		};
-	}
-	
 	public static void initGlobal(FragmentActivity activity){
 		
-		if(isInitialized())
+		if(isInitialized()){
+			Log.i("GlobalData", "the global data components are already initialized !");			
 			return;
-				
+		}
 		if(getFragmentManager() == null)
 			setFragmentManager(new FragmentManager());
 		
 		getFragmentManager().setActivity(activity);
-		setActivity(activity);
-		initServiceConnection();
+		setActivity(activity);		
 		
 		if(Utils.isTracerServiceRunning(getActivity())){
 			Log.i("GlogalData", "TracerService is running !");
 		}
 		
-		setBroadcastReceiver(new TracerServiceBroadcastReceiver());
-		setIntentFilter(new IntentFilter("ro.vadim.picturetrace.NewPicture"));
 		setInitialized(true);
 	}
 	
@@ -75,14 +58,6 @@ public class GlobalData {
 
 	public static void setFragmentManager(BoilerplateFragmentManager fragmentManager) {
 		GlobalData.fragmentManager = fragmentManager;
-	}
-
-	public static TracerServiceBroadcastReceiver getBroadcastReceiver() {
-		return broadcastReceiver;
-	}
-
-	public static void setBroadcastReceiver(TracerServiceBroadcastReceiver broadcastReceiver) {
-		GlobalData.broadcastReceiver = broadcastReceiver;
 	}
 
 	public static IntentFilter getIntentFilter() {
