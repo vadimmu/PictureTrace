@@ -6,7 +6,10 @@ import java.util.LinkedList;
 import ro.vadim.picturetrace.visuals.BoilerplateFragmentManager;
 import ro.vadim.picturetrace.visuals.FragmentManager;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -17,7 +20,9 @@ public class GlobalData {
 	
 	private static Activity activity = null;
 	
-	private static BoilerplateFragmentManager fragmentManager = null;	
+	private static BoilerplateFragmentManager fragmentManager = null;
+	private static TracerServiceBroadcastReceiver broadcastReceiver = null;
+	
 	private static IntentFilter intentFilter = null;
 	private static ServiceConnection serviceConnection = null;
 	private static boolean initialized = false;	
@@ -37,6 +42,10 @@ public class GlobalData {
 		
 		getFragmentManager().setActivity(activity);
 		setActivity(activity);		
+		
+		broadcastReceiver = new TracerServiceBroadcastReceiver();
+		getActivity().registerReceiver(broadcastReceiver, new IntentFilter("ro.vadim.picturetrace.NewPicture"));
+		
 		
 		if(Utils.isTracerServiceRunning(getActivity())){
 			Log.i("GlogalData", "TracerService is running !");

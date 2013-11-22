@@ -23,6 +23,11 @@ public class TracerServiceBroadcastReceiver extends BroadcastReceiver{
 			
 			Toast.makeText(GlobalData.getActivity(), (String)extras.get("url"), Toast.LENGTH_LONG).show();
 			
+			synchronized (GlobalData.getPictureURLs()) {
+				GlobalData.getPictureURLs().add((String)extras.get("url"));
+			}
+			
+			
 		}
 	}
 

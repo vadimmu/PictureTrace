@@ -270,17 +270,24 @@ public class PictureRetriever {
 		return imageF;
 	}
 	
-	public File savePictureToFile(Location location) throws IOException{
-		Picture picture = getRandomPictureInfo(location);
+	
+	
+	public File savePictureToFile(Picture picture) throws IOException{
+		
 		if(picture == null){
 			Log.i("TracerService", "onLocationChanged(): no picture available for this location !");
 			return null;
 		}
-		
+				
 		File pictureFile = createImageFile();	
 		httpRequester.getPicture(picture.url, pictureFile);
 		
-		return pictureFile;
+		return pictureFile;		
+	}
+	
+	public File savePictureToFile(Location location) throws IOException{
+		Picture picture = getRandomPictureInfo(location);		
+		return savePictureToFile(picture);
 	}	
 	
 	

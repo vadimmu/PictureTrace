@@ -58,7 +58,7 @@ public class TracerService extends Service{
 	//lifecycle management
 	private boolean paused = false;
 	private boolean stopped = false;
-	private boolean testRun = false;
+	private boolean testRun = true;
 	
 	//testing
 	Thread mockLocationsThread = null;
@@ -218,7 +218,15 @@ public class TracerService extends Service{
 	
 	
 	public void getPictureIntoGallery(Location location) throws IOException{
-		File pictureFile = pictureRetriever.savePictureToFile(location);		
+		
+		Picture picture = pictureRetriever.getRandomPictureInfo(location);
+		if(picture != null){
+			Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");
+			pictureIntent.putExtra("url", picture.url);
+			sendBroadcast(pictureIntent);
+		}		
+		
+		File pictureFile = pictureRetriever.savePictureToFile(picture);		
 		galleryAddPic(pictureFile);
 	}
 	
