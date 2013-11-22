@@ -2,6 +2,7 @@ package ro.vadim.picturetrace.utils;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.util.Log;
@@ -20,14 +21,17 @@ public class Picture{
 	private double latitude = 0.0;
 	private double longitude = 0.0;
 	private String fileName = null;
+	private Date timestamp = null;
 	
-	public Picture(String newUrl, String newDescription, double newLatitude, double newLongitude, String newFileName){
+	public Picture(String newUrl, String newDescription, double newLatitude, double newLongitude, String newFileName){		
 		this.setUrl(newUrl);
 		this.setDescription(newDescription);
 		this.setLatitude(newLatitude);
 		this.setLongitude(newLongitude);
 		if(newFileName != null)
 			this.setFileName(newFileName);
+		
+		setTimestamp(new Date());
 	}
 	
 	@JsonIgnore
@@ -39,6 +43,7 @@ public class Picture{
 			pictureRepresentation.put("description", getDescription());
 			pictureRepresentation.put("latitude", String.valueOf(getLatitude()));
 			pictureRepresentation.put("longitude", String.valueOf(getLongitude()));
+			pictureRepresentation.put("timestamp", String.valueOf(getTimestamp()));
 			
 			if(fileName != null)
 				pictureRepresentation.put("fileName", getFileName());
@@ -67,6 +72,8 @@ public class Picture{
 					Double.valueOf(pictureRepresentation.get("latitude")),
 					Double.valueOf(pictureRepresentation.get("longitude")),
 					null);
+			
+			newPicture.setTimestamp(new Date(Long.valueOf(pictureRepresentation.get("timestamp"))));
 			
 			String fileName = (String)pictureRepresentation.get("fileName");
 			if(fileName != null){
@@ -145,5 +152,13 @@ public class Picture{
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 }

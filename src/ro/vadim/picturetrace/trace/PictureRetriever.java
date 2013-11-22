@@ -248,14 +248,14 @@ public class PictureRetriever {
 		return storageDir;
 	}
 	
-	private File createImageFile() throws IOException {
+	private File createImageFile(Picture picture) throws IOException {
 		// Create an image file name
 		
 		Date newDate = new Date();
 		
-		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(picture.getTimestamp());
 		
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_"+String.valueOf(System.currentTimeMillis());
+		String imageFileName = JPEG_FILE_PREFIX + timeStamp;
 		
 		Log.i("TracerService", "createImageFile(): imageFileName: "+imageFileName);
 				
@@ -278,7 +278,7 @@ public class PictureRetriever {
 			return null;
 		}
 				
-		File pictureFile = createImageFile();	
+		File pictureFile = createImageFile(picture);	
 		httpRequester.getPicture(picture.getUrl(), pictureFile);
 				
 		
