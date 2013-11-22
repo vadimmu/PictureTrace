@@ -19,7 +19,7 @@ public class PhotoFragment extends BoilerplateFragment{
 		if(GlobalData.getPictures() == null)			
 			GlobalData.setPictures(new LinkedList<Picture>());
 		
-		picturesAdapter = new PhotoAdapter(getActivity(), R.layout.listview_item_row);
+		picturesAdapter = new PhotoAdapter(getActivity());
 		
 		picturesView = (ListView) view.findViewById(R.id.listPictures);
 		if(picturesView == null)

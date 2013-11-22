@@ -210,7 +210,7 @@ public class PictureRetriever {
 	
 
 	
-	public File getAlbumStorageDir(String albumName) {
+	public static File getAlbumStorageDir(String albumName) {
 		// TODO Auto-generated method stub
 		return new File(
 		  Environment.getExternalStoragePublicDirectory(
@@ -220,7 +220,7 @@ public class PictureRetriever {
 		);
 	}
 		
-	private File getAlbumDir() throws IOException {
+	public static File getAlbumDir() throws IOException {
 		File storageDir = null;
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -252,8 +252,6 @@ public class PictureRetriever {
 		// Create an image file name
 		
 		Date newDate = new Date();
-		
-		
 		
 		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
 		String imageFileName = JPEG_FILE_PREFIX + timeStamp;

@@ -154,11 +154,9 @@ public class TracerService extends Service{
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
 					minTimeMillis, 
 					minDistanceMeters,
-					locationListener);
-			
-			
-				
+					locationListener);	
 		}
+		
 		else{
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
 					minTimeMillis, 
@@ -170,11 +168,7 @@ public class TracerService extends Service{
 					minDistanceMeters,
 					locationListener);
 		}
-		
 	}
-		
-	
-	
 	
 	
 	public TracerService() {
