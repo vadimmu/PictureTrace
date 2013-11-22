@@ -209,7 +209,10 @@ public class TracerService extends Service{
 		if(mockLocationsThread != null){
 			if(mockLocationsThread.isAlive())
 				mockLocationRunnable.setStopped(true);
-		}		
+		}
+		
+		locationManager.removeUpdates(locationListener);
+		
 		Toast.makeText(this, "TracerService has been destroyed", Toast.LENGTH_LONG).show();
 	}
 	
@@ -219,17 +222,15 @@ public class TracerService extends Service{
 	
 	public void getPictureIntoGallery(Location location) throws IOException{
 		
-		Picture picture = pictureRetriever.getRandomPictureInfo(location);
-				
-		File pictureFile = pictureRetriever.savePictureToFile(picture);
-		picture.setFileName(pictureFile.getAbsolutePath());
+		Picture picture = pictureRetriever.getRandomPictureInfo(location);				
+		File pictureFile = pictureRetriever.savePictureToFile(picture);				
 		
 		if(picture != null){
+			picture.setFileName(pictureFile.getAbsolutePath());
 			Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");			
 			pictureIntent.putExtra("picture", picture.toJson());
 			sendBroadcast(pictureIntent);
-		}		
-		
+		}
 		
 		galleryAddPic(pictureFile);
 	}

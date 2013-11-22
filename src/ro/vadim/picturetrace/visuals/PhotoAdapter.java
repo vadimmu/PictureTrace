@@ -55,9 +55,8 @@ public class PhotoAdapter extends BaseAdapter{
             holder = new PhotoHolder(row);
             
             Picture photo = (Picture)getItem(position);        
-            Log.i("PhotoAdapter", "loading image URL: "+photo.getFileName());
+            Log.i("PhotoAdapter", "loading image URL: "+photo.getFileName());            
             holder.photoView.loadUrl("file:///"+photo.getFileName());
-            
             row.setTag(holder);            
         }
         
