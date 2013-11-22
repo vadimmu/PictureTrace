@@ -87,6 +87,10 @@ public class Picture{
 		}
 	}
 	
+	
+	public boolean hasFile(){
+		return (fileName != null);		
+	}
 
 	public String getUrl() {
 		return url;

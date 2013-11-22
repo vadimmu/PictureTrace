@@ -1,9 +1,12 @@
 package ro.vadim.picturetrace.visuals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ro.vadim.picturetrace.R;
+import ro.vadim.picturetrace.trace.PictureRetriever;
 import ro.vadim.picturetrace.utils.GlobalData;
 import ro.vadim.picturetrace.utils.Picture;
 import ro.vadim.picturetrace.utils.ToDo;
@@ -29,9 +32,11 @@ public class PhotoAdapter extends BaseAdapter{
     Context context = null;
     int layoutResourceId = R.layout.listview_item_row;  
     ArrayList<View> rows = null;
+    PictureRetriever pictureRetriever = null;
     
     public PhotoAdapter(Context context) {
         super();
+        pictureRetriever = new PictureRetriever(null);
         rows = new ArrayList<View>(GlobalData.getPictures().size());        
         this.context = context;
     }
@@ -47,7 +52,7 @@ public class PhotoAdapter extends BaseAdapter{
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        
+    	    	
     	View row = convertView;
     	
     	if(position < rows.size())
@@ -59,6 +64,16 @@ public class PhotoAdapter extends BaseAdapter{
             row = inflater.inflate(layoutResourceId, parent, false);                        
             
             Picture picture = (Picture)getItem(position);
+            if(!picture.hasFile()){
+            	try {
+					File pictureFile = pictureRetriever.savePictureToFile(picture);
+					picture.setFileName(pictureFile.getAbsolutePath());
+				}
+            	catch (IOException e) {
+					Log.e("PhotoAdapter", "file could not be created for the retrieved picture");
+					e.printStackTrace();
+				}
+            }            
             holder = new PhotoHolder(row, picture);
             
             
