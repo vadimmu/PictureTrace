@@ -16,9 +16,12 @@ import android.widget.ToggleButton;
 
 public class MainMenuFragment extends BoilerplateFragment{
 
+	
+	
+	
 	ToggleButton buttonTrace = null;
 	Button buttonCheckTracerService = null;
-	
+	Button buttonCheckPhotos = null;
 	
 	
 	
@@ -44,6 +47,20 @@ public class MainMenuFragment extends BoilerplateFragment{
 	
 	
 	
+	private void initButtonCheckPhotos(View view){
+		
+		final View thisView = view;
+		buttonCheckPhotos = (Button)view.findViewById(R.id.buttonViewPictures);
+		buttonCheckPhotos.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				GlobalData.getFragmentManager().loadFragment(PhotoFragment.class.getCanonicalName(), null, null);
+				
+			}
+		});
+	}
 	
 	private void initButtonCheckTracerService(View view){
 		final View thisView = view;
@@ -92,7 +109,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 	
 	@Override
 	public void initComponents(View view){
-		
+		initButtonCheckPhotos(view);
 		initButtonTrace(view);
 		initButtonCheckTracerService(view);		
 	}

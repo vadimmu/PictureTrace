@@ -11,8 +11,7 @@ public class FragmentManager extends BoilerplateFragmentManager{
 	@Override
 	public boolean registerFragmentLayouts() {		
 		setLayoutForFragment(MainMenuFragment.class.getCanonicalName(), R.layout.layout_main_menu);
-		setLayoutForFragment(PictureFragment.class.getCanonicalName(), R.layout.layout_pictures);
-		setLayoutForFragment(TestFragment.class.getCanonicalName(), R.layout.layout_test);
+		setLayoutForFragment(PhotoFragment.class.getCanonicalName(), R.layout.layout_pictures);
 		return false;
 	}
 	

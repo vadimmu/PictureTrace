@@ -58,14 +58,13 @@ public class TracerService extends Service{
 	//lifecycle management
 	private boolean paused = false;
 	private boolean stopped = false;
-	private boolean testRun = true;
+	private boolean testRun = false;
 	
 	//testing
 	Thread mockLocationsThread = null;
 	MockLocationRunnable mockLocationRunnable = null;
 	
-	
-	
+		
 	
 	
 	private void initPictureRetrieval(boolean test){
@@ -115,7 +114,8 @@ public class TracerService extends Service{
 				Log.i("TracerService", "LocationListener.onLocationChanged(): LOCATION CHANGED !");				
 				
 				if(getLastLocation() == null){
-					Log.i("TracerService", "LastLocation = null !");					
+					Log.i("TracerService", "LastLocation = null !");
+					setLastLocation(location);
 				}
 				
 				else if(getDistanceBetweenPositions(location, getLastLocation()) >= pictureTraceDistance){
@@ -139,9 +139,10 @@ public class TracerService extends Service{
 					});
 					
 					retrievePictureThread.start();
+					setLastLocation(location);
 				}
 				
-				setLastLocation(location);
+				
 			}
 		};
 				
@@ -154,10 +155,17 @@ public class TracerService extends Service{
 					minTimeMillis, 
 					minDistanceMeters,
 					locationListener);
+			
+			
 				
 		}
 		else{
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
+					minTimeMillis, 
+					minDistanceMeters,
+					locationListener);
+			
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
 					minTimeMillis, 
 					minDistanceMeters,
 					locationListener);

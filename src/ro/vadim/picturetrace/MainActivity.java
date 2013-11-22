@@ -2,7 +2,6 @@ package ro.vadim.picturetrace;
 
 import ro.vadim.picturetrace.utils.GlobalData;
 import ro.vadim.picturetrace.visuals.MainMenuFragment;
-import ro.vadim.picturetrace.visuals.TestFragment;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -23,7 +22,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	@Override
-	protected void onDestroy() {		
+	protected void onDestroy() {
 		super.onDestroy();		
 	}
 	

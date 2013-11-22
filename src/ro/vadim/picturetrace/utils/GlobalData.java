@@ -1,6 +1,8 @@
 package ro.vadim.picturetrace.utils;
 
 
+import java.util.LinkedList;
+
 import ro.vadim.picturetrace.visuals.BoilerplateFragmentManager;
 import ro.vadim.picturetrace.visuals.FragmentManager;
 import android.app.Activity;
@@ -19,9 +21,12 @@ public class GlobalData {
 	private static IntentFilter intentFilter = null;
 	private static ServiceConnection serviceConnection = null;
 	private static boolean initialized = false;	
-	
+	private static LinkedList<String> pictureURLs = new LinkedList<String>();
 		
 	public static void initGlobal(FragmentActivity activity){
+		
+		pictureURLs.add("http://static.panoramio.com/photos/large/2140192.jpg");
+		pictureURLs.add("http://static.panoramio.com/photos/large/76123992.jpg");
 		
 		if(isInitialized()){
 			Log.i("GlobalData", "the global data components are already initialized !");			
@@ -74,6 +79,14 @@ public class GlobalData {
 
 	public static void setInitialized(boolean initialized) {
 		GlobalData.initialized = initialized;
+	}
+	
+	public static LinkedList<String> getPictureURLs() {
+		return pictureURLs;
+	}
+	
+	public static void setPictureURLs(LinkedList<String> pictureURLs) {
+		GlobalData.pictureURLs = pictureURLs;
 	}
 
 
