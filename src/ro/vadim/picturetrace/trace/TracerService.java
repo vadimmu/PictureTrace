@@ -220,13 +220,17 @@ public class TracerService extends Service{
 	public void getPictureIntoGallery(Location location) throws IOException{
 		
 		Picture picture = pictureRetriever.getRandomPictureInfo(location);
+				
+		File pictureFile = pictureRetriever.savePictureToFile(picture);
+		picture.setFileName(pictureFile.getAbsolutePath());
+		
 		if(picture != null){
-			Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");
-			pictureIntent.putExtra("url", picture.url);
+			Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");			
+			pictureIntent.putExtra("picture", picture.toJson());
 			sendBroadcast(pictureIntent);
 		}		
 		
-		File pictureFile = pictureRetriever.savePictureToFile(picture);		
+		
 		galleryAddPic(pictureFile);
 	}
 	

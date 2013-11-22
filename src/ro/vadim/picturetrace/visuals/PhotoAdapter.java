@@ -5,8 +5,10 @@ import java.util.LinkedList;
 
 import ro.vadim.picturetrace.R;
 import ro.vadim.picturetrace.utils.GlobalData;
+import ro.vadim.picturetrace.utils.Picture;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,49 +21,50 @@ public class PhotoAdapter extends BaseAdapter{
 	
     Context context;
     int layoutResourceId = R.layout.listview_item_row;  
-    LinkedList<String> data = new LinkedList<String>();
+    ArrayList<View> rows = null;
     
-    
-    public PhotoAdapter(Context context, int layoutResourceId, LinkedList<String> incomingData) {
+    public PhotoAdapter(Context context, int layoutResourceId) {
         super();
-        
+        rows = new ArrayList<View>(GlobalData.getPictures().size());
         this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        
-        for(String url:incomingData){
-        	data.addFirst(url);
-        }
-        
-        this.data = data;
+        this.context = context;        
     }
     
-    public void addURL(String newUrl){
-    	data.add(newUrl);    	
+    public void addPicture(Picture newPicture){
+    	if(GlobalData.getPictures() == null)
+    		GlobalData.setPictures(new LinkedList<Picture>());
+    	
+    	synchronized (GlobalData.getPictures()) {
+    		GlobalData.getPictures().add(newPicture);
+		}    	
     }
     
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        PhotoHolder holder = null;
         
+    	View row = convertView;
+    	
+    	if(position < rows.size())
+    		row = rows.get(rows.size() - 1 - position); 
+    		
+        PhotoHolder holder = null;        
         if(row == null){        	
             LayoutInflater inflater = GlobalData.getActivity().getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
-                        
+            row = inflater.inflate(layoutResourceId, parent, false);                        
             holder = new PhotoHolder(row);
             
-            row.setTag(holder);
+            Picture photo = (Picture)getItem(position);        
+            Log.i("PhotoAdapter", "loading image URL: "+photo.getFileName());
+            holder.photoView.loadUrl("file:///"+photo.getFileName());
+            
+            row.setTag(holder);            
         }
         
         else{
             holder = (PhotoHolder)row.getTag();
         }        
         
-        String photoURL = data.get(position);
-        if(photoURL != null){        	
-        	holder.photoView.loadUrl(photoURL);        	
-        }
         
         return row;
     }
@@ -77,12 +80,12 @@ public class PhotoAdapter extends BaseAdapter{
 
 	@Override
 	public int getCount() {		
-		return data.size();
+		return GlobalData.getPictures().size();
 	}
 
 	@Override
 	public Object getItem(int position) {		
-		return data.get(getCount() - 1 - position);
+		return GlobalData.getPictures().get(getCount() - 1 - position);
 	}
 
 	@Override

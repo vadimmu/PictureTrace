@@ -14,25 +14,26 @@ public class JsonParser {
     
     private static JsonParser parser = null;
     
-    private ObjectMapper mapper = null;
+    private static ObjectMapper mapper = null;
     
     
     
     
     
     public JsonParser(){                
-            mapper = new ObjectMapper();                
+         if(getMapper() == null)
+        	 setMapper(new ObjectMapper());
     }        
     
     
     
     public Map<String, Object> extractObject(String message){
     	Map<String, Object> jsonObject = null;
-	    if(mapper == null)
-	    	mapper = new ObjectMapper();
+	    if(getMapper() == null)
+	    	setMapper(new ObjectMapper());
 	    
 	    try{
-	        jsonObject = mapper.readValue(message, HashMap.class);
+	        jsonObject = getMapper().readValue(message, HashMap.class);
 	    }
 	    
 	    catch (JsonParseException e) {
@@ -53,11 +54,11 @@ public class JsonParser {
     public ArrayList<Map> extractArrayOfObjects(String message){
 	    ArrayList<Map> jsonObject = null;
 	            
-	    if(mapper == null)
-	            mapper = new ObjectMapper();
+	    if(getMapper() == null)
+	            setMapper(new ObjectMapper());
 	    
 	    try{
-	        jsonObject = mapper.readValue(message, ArrayList.class);
+	        jsonObject = getMapper().readValue(message, ArrayList.class);
 	    }
 	    
 	    catch (JsonParseException e) {
@@ -70,7 +71,7 @@ public class JsonParser {
 	        Log.println(Log.WARN, "JSON ERROR (JsonMappingException)", e.toString());
 	    }
 	                    
-	    finally{         
+	    finally{
 	            return jsonObject;
 	    }                
     }
@@ -92,6 +93,21 @@ public class JsonParser {
     	Map<String, Object> childObject = (Map<String, Object>) parentObject.get(tag);                
         return childObject;
     }
+
+
+
+	public static ObjectMapper getMapper() {
+		if(mapper == null)
+			mapper = new ObjectMapper();
+		
+		return mapper;
+	}
+
+
+
+	public static void setMapper(ObjectMapper mapper) {
+		JsonParser.mapper = mapper;
+	}
     
     
     

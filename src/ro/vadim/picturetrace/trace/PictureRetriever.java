@@ -142,7 +142,8 @@ public class PictureRetriever {
 						(String)photo.get("photo_file_url"),
 						(String)photo.get("photo_title"),
 						(Double)photo.get("latitude"),
-						(Double)photo.get("longitude")
+						(Double)photo.get("longitude"),
+						null
 				));
 			}
 		}
@@ -155,7 +156,7 @@ public class PictureRetriever {
 		
 		ArrayList<Picture> pictures = getPictures(responseString);
 		if(pictures.size() > 0){
-			Log.i("Tracer", "getFirstPicture(): "+pictures.get(0).url);			
+			Log.i("Tracer", "getFirstPicture(): "+pictures.get(0).getUrl());			
 			return pictures.get(0);
 		}
 		
@@ -184,7 +185,7 @@ public class PictureRetriever {
 		if(pictures.size() > 0){
 			
 			int index = (int)(Math.random()*pictures.size());			
-			Log.i("Tracer", "getFirstPicture(): "+pictures.get(index).url);			
+			Log.i("Tracer", "getFirstPicture(): "+pictures.get(index).getUrl());			
 			return pictures.get(index);
 		}
 		Log.i("Tracer", "getRandomPicture(): NULL");
@@ -280,7 +281,8 @@ public class PictureRetriever {
 		}
 				
 		File pictureFile = createImageFile();	
-		httpRequester.getPicture(picture.url, pictureFile);
+		httpRequester.getPicture(picture.getUrl(), pictureFile);
+				
 		
 		return pictureFile;		
 	}

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import ro.vadim.picturetrace.R;
 import ro.vadim.picturetrace.utils.GlobalData;
+import ro.vadim.picturetrace.utils.Picture;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -15,10 +16,10 @@ public class PhotoFragment extends BoilerplateFragment{
 	
 	private void initPicturesView(View view){
 		
-		if(GlobalData.getPictureURLs() == null)
-			GlobalData.setPictureURLs(new LinkedList<String>());
+		if(GlobalData.getPictures() == null)			
+			GlobalData.setPictures(new LinkedList<Picture>());
 		
-		picturesAdapter = new PhotoAdapter(getActivity(), R.layout.listview_item_row, GlobalData.getPictureURLs());
+		picturesAdapter = new PhotoAdapter(getActivity(), R.layout.listview_item_row);
 		
 		picturesView = (ListView) view.findViewById(R.id.listPictures);
 		if(picturesView == null)
