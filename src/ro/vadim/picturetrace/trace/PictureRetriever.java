@@ -254,11 +254,11 @@ public class PictureRetriever {
 		Date newDate = new Date();
 		
 		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp;
+		
+		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_"+String.valueOf(System.currentTimeMillis());
 		
 		Log.i("TracerService", "createImageFile(): imageFileName: "+imageFileName);
-		
-		
+				
 		File albumF = getAlbumDir();
 		File imageF = new File(albumF+"/"+imageFileName+JPEG_FILE_SUFFIX);
 		

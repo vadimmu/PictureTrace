@@ -128,13 +128,15 @@ public class TracerService extends Service{
 						@Override
 						public void run() {
 							
-							try {								
-								getPictureIntoGallery(thisLocation);
+							
+							Picture picture = pictureRetriever.getRandomPictureInfo(thisLocation);				
+							
+							if(picture != null){									
+								Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");			
+								pictureIntent.putExtra("picture", picture.toJson());
+								sendBroadcast(pictureIntent);
 							}
-							catch (IOException e) {
-								Log.i("TracerService", "traceRunnable.createImageFile(): IOException: "+e.toString());
-								e.printStackTrace();
-							}
+							
 						}
 					});
 					
@@ -214,37 +216,6 @@ public class TracerService extends Service{
 	
 	
 	
-	public void getPictureIntoGallery(Location location) throws IOException{
-		
-		Picture picture = pictureRetriever.getRandomPictureInfo(location);				
-		//File pictureFile = pictureRetriever.savePictureToFile(picture);				
-		
-		if(picture != null){
-			//picture.setFileName(pictureFile.getAbsolutePath());
-			Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");			
-			pictureIntent.putExtra("picture", picture.toJson());
-			sendBroadcast(pictureIntent);
-		}
-		
-		//galleryAddPic(pictureFile);
-	}
-	
-	private void galleryAddPic(File newFile) {
-		
-		if(newFile == null)
-			return;
-		
-		Log.i("TracerService", "galleryAddPic(): attempting to add the picture to the gallery...");
-		
-	    Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");		
-	    Uri contentUri = Uri.fromFile(newFile);
-	    
-	    Log.i("TracerService", "galleryAddPic(): Picture URI: "+contentUri.toString());
-	    
-	    mediaScanIntent.setData(contentUri);
-	    	    
-	    sendBroadcast(mediaScanIntent);
-	}
 		
 	
 	

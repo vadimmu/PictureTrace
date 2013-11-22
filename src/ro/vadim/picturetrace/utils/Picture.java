@@ -39,8 +39,10 @@ public class Picture{
 			pictureRepresentation.put("description", getDescription());
 			pictureRepresentation.put("latitude", String.valueOf(getLatitude()));
 			pictureRepresentation.put("longitude", String.valueOf(getLongitude()));
-			pictureRepresentation.put("fileName", getFileName());
 			
+			if(fileName != null)
+				pictureRepresentation.put("fileName", getFileName());
+						
 			return JsonParser.getMapper().writeValueAsString(pictureRepresentation);			
 		} 
 		
@@ -64,7 +66,16 @@ public class Picture{
 					pictureRepresentation.get("description"),
 					Double.valueOf(pictureRepresentation.get("latitude")),
 					Double.valueOf(pictureRepresentation.get("longitude")),
-					pictureRepresentation.get("fileName"));			
+					null);
+			
+			String fileName = (String)pictureRepresentation.get("fileName");
+			if(fileName != null){
+				if(fileName.equals(""))
+					newPicture.setFileName(null);
+				else
+					newPicture.setFileName(fileName);
+			}
+			
 		}
 		
 		catch (JsonParseException e) {

@@ -13,7 +13,10 @@ import ro.vadim.picturetrace.utils.ToDo;
 import ro.vadim.picturetrace.utils.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
+import android.location.Location;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +35,10 @@ public class PhotoAdapter extends BaseAdapter{
     Context context = null;
     int layoutResourceId = R.layout.listview_item_row;  
     ArrayList<View> rows = null;
-    PictureRetriever pictureRetriever = null;
+    
     
     public PhotoAdapter(Context context) {
-        super();
-        pictureRetriever = new PictureRetriever(null);
+        super();        
         rows = new ArrayList<View>(GlobalData.getPictures().size());        
         this.context = context;
     }
@@ -63,22 +65,13 @@ public class PhotoAdapter extends BaseAdapter{
             LayoutInflater inflater = GlobalData.getActivity().getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);                        
             
-            Picture picture = (Picture)getItem(position);
-            if(!picture.hasFile()){
-            	try {
-					File pictureFile = pictureRetriever.savePictureToFile(picture);
-					picture.setFileName(pictureFile.getAbsolutePath());
-				}
-            	catch (IOException e) {
-					Log.e("PhotoAdapter", "file could not be created for the retrieved picture");
-					e.printStackTrace();
-				}
-            }            
+            Picture picture = (Picture)getItem(position);                     
             holder = new PhotoHolder(row, picture);
             
-            
-            Log.i("PhotoAdapter", "loading image URL: "+picture.getFileName());            
-            holder.photoView.loadUrl("file:///"+picture.getFileName());
+            if(picture.hasFile()){
+            	Log.i("PhotoAdapter", "loading image URL: "+picture.getFileName());            
+            	holder.photoView.loadUrl("file:///"+picture.getFileName());
+            }
             row.setTag(holder);
         }
         
@@ -88,6 +81,10 @@ public class PhotoAdapter extends BaseAdapter{
         
         return row;
     }
+    
+    
+    
+    
     
     
     static class PhotoHolder{
