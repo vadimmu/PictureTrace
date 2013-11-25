@@ -5,47 +5,69 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
+    <ToggleButton
+        android:id="@+id/buttonTrace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Trace" />
+
     <TextView
         android:id="@+id/labelTrace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonTrace"
         android:layout_alignBottom="@+id/buttonTrace"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="46dp"
-        android:text="Trace status"
+        android:layout_alignParentLeft="true"
+        android:text="Start/Stop trail"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/buttonTrailMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="Trail Map" />
+
+    <Button
+        android:id="@+id/buttonLastImpression"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonTrailMap"
+        android:layout_marginTop="40dp"
+        android:text="Last Impression" />
+
+    <Button
+        android:id="@+id/buttonViewPictures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonTrailMap"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="40dp"
+        android:text="All the pictures" />
 
     <Button
         android:id="@+id/buttonChecktTracerService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Check Tracer Service" />
+        android:layout_alignParentRight="true"
+        android:text="Check" />
 
     <TextView
         android:id="@+id/labelCheckTracerService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonChecktTracerService"
-        android:layout_centerHorizontal="true"
-        android:text="is TracerService running ?"
+        android:layout_alignBaseline="@+id/buttonChecktTracerService"
+        android:layout_alignBottom="@+id/buttonChecktTracerService"
+        android:layout_alignParentLeft="true"
+        android:text="service running?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <ToggleButton
-        android:id="@+id/buttonTrace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Trace" />
-
-    <Button
-        android:id="@+id/buttonViewPictures"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Check out the pictures" />
     
 </RelativeLayout>

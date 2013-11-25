@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ro.vadim.picturetrace"
+    package="ro.vadim.picturetrails"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="0.1" >
 
     <uses-sdk
         android:minSdkVersion="17"
@@ -18,12 +18,12 @@
 	
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/picture_trails_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
         <service 
-            android:name="ro.vadim.picturetrace.trace.TracerService" 
+            android:name="ro.vadim.picturetrails.trace.TracerService" 
             android:enabled="true"
             android:process=":TracerService"
             android:exported="false"
@@ -31,7 +31,7 @@
             />
         
         <activity
-            android:name="ro.vadim.picturetrace.MainActivity"
+            android:name="ro.vadim.picturetrails.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +39,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <meta-data
+    		android:name="com.google.android.maps.v2.API_KEY"
+    		android:value="AIzaSyAmHPHtEYBu3gqOWDlDLBqEx62SgfyBZew"
+    		/>
+        
+        
     </application>
 
 </manifest>
