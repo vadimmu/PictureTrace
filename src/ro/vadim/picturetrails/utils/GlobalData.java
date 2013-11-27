@@ -40,7 +40,7 @@ public class GlobalData {
 	private static ServiceConnection serviceConnection = null;
 	private static boolean initialized = false;	
 	private static LinkedList<Picture> pictures = new LinkedList<Picture>();
-		
+	
 	
 	
 	public static void initGlobal(FragmentActivity activity){
@@ -63,7 +63,8 @@ public class GlobalData {
 			setDatabase(new DatabaseHelper(getActivity()));
 		}
 		
-		setInitialized(true);
+		setInitialized(true);		
+		
 	}
 	
 	public static void registerBroadcastReceiver(){

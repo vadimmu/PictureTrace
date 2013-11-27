@@ -93,7 +93,8 @@ public abstract class BoilerplateFragmentManager{
 			transaction.replace(R.id.topContainer, newFragment);
 			transaction.addToBackStack(newFragment.getTag());
 			transaction.commit();
-						
+			
+			setCurrentFragment(newFragment);
 			return true;
 		}
 		catch (InstantiationException e) {

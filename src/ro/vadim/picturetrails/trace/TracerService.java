@@ -139,13 +139,12 @@ public class TracerService extends Service{
 							Log.i("TracerService",  "last picture: ");
 							Log.i("TracerService",  db.getLastPicture().toJson());
 							
-							/*
+							
 							if(picture != null){									
-								Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");			
-								pictureIntent.putExtra("picture", picture.toJson());
+								Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");
 								sendBroadcast(pictureIntent);
 							}
-							*/
+							
 						}
 					});
 					

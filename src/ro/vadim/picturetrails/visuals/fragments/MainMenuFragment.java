@@ -27,23 +27,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 	Button buttonLastImpression = null;
 	
 	
-	public void startTracerService(View view){
-		if(Utils.isTracerServiceRunning(getActivity())){
-			Log.i("MainMenuFragment", "startTracerService(): TracerService is already running");
-			return;
-		}
-		Intent serviceIntent = new Intent(getActivity(), TracerService.class);	
-		getActivity().startService(serviceIntent);
-	}
-		
-	public void stopTracerService(View view){
-		if(!Utils.isTracerServiceRunning(getActivity())){
-			Log.i("MainMenuFragment", "stopTracerService(): TracerService is already stopped");
-			return;
-		}
-		Intent serviceIntent = new Intent(getActivity(), TracerService.class);
-		getActivity().stopService(serviceIntent);
-	}
+	
 	
 	
 	
@@ -75,7 +59,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 	
 	private void initButtonCheckPhotos(View view){
 		
-		final View thisView = view;
+		
 		buttonCheckPhotos = (Button)view.findViewById(R.id.buttonViewPictures);
 		buttonCheckPhotos.setOnClickListener(new OnClickListener() {
 			
@@ -89,7 +73,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 	}
 	
 	private void initButtonCheckTracerService(View view){
-		final View thisView = view;
+		
 		buttonCheckTracerService = (Button) view.findViewById(R.id.buttonChecktTracerService);
 		buttonCheckTracerService.setOnClickListener(new OnClickListener() {
 			
@@ -104,8 +88,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 	}
 		
 	private void initButtonTrace(View view){
-		
-		final View thisView = view;
+				
 		buttonTrace = (ToggleButton)view.findViewById(R.id.buttonTrace);
 		
 		if(!Utils.isTracerServiceRunning(getActivity())){
@@ -125,19 +108,19 @@ public class MainMenuFragment extends BoilerplateFragment{
 				Log.i("MainMenuFragment", "buttonTrace was clicked !");
 				
 				if(buttonTrace.isChecked())
-					startTracerService(thisView);
+					Utils.startTracerService(getActivity());
 				else
-					stopTracerService(thisView);
+					Utils.stopTracerService(getActivity());
 			}
 		});
 	}
-	
-	
+		
 	@Override
 	public void initComponents(View view){
 		initButtonCheckPhotos(view);
 		initButtonTrace(view);
-		initButtonCheckTracerService(view);		
+		initButtonCheckTracerService(view);
+		initButtonLastImpression(view);
 	}
 
 	

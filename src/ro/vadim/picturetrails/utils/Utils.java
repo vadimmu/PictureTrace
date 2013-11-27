@@ -31,14 +31,16 @@ public class Utils {
 
 	public static PictureRetriever pictureRetriever = new PictureRetriever(null);
 	
-	public static boolean isGpsOn(){		
+	
+	
+	
+	
+	public static boolean isGpsOn(){
 		LocationManager manager = (LocationManager) GlobalData.getActivity().getSystemService(Context.LOCATION_SERVICE);
 		return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 	}
-	
-	
-	
-	public static boolean isInternetOn(){		
+		
+	public static boolean isInternetOn(){
 		ConnectivityManager manager = (ConnectivityManager)	GlobalData.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		for(NetworkInfo info : manager.getAllNetworkInfo()){
@@ -49,6 +51,9 @@ public class Utils {
 		return false;
 	}
 		
+	
+	
+	
 	
 	public static void buildAlertMessageNoGps(final Context context) {
 	    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -109,8 +114,11 @@ public class Utils {
 	}
 	
 	
-	public static boolean isTracerServiceRunning(Activity activity) {
-	    ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+	
+	
+	
+	public static boolean isTracerServiceRunning(Context context) {
+	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 	        if (TracerService.class.getName().equals(service.service.getClassName())) {
 	            return true;
@@ -119,8 +127,26 @@ public class Utils {
 	    return false;
 	}
 	
+	public static void startTracerService(Context context){
+		if(Utils.isTracerServiceRunning(context)){
+			Log.i("MainMenuFragment", "startTracerService(): TracerService is already running");
+			return;
+		}
+		Intent serviceIntent = new Intent(context, TracerService.class);	
+		context.startService(serviceIntent);
+	}
+		
+	public static void stopTracerService(Context context){
+		if(!Utils.isTracerServiceRunning(context)){
+			Log.i("MainMenuFragment", "stopTracerService(): TracerService is already stopped");
+			return;
+		}
+		Intent serviceIntent = new Intent(context, TracerService.class);
+		context.stopService(serviceIntent);
+	}
 	
-
+	
+	
 	
 	
 	

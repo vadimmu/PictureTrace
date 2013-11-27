@@ -195,33 +195,34 @@ containing a value of this type.
         public static final int picture_trails_icon=0x7f02001d;
     }
     public static final class id {
-        public static final int action_settings=0x7f05001a;
-        public static final int buttonChecktTracerService=0x7f050011;
+        public static final int action_settings=0x7f05001b;
+        public static final int buttonChecktTracerService=0x7f050012;
         public static final int buttonDeleteFile=0x7f050008;
-        public static final int buttonGetPicture=0x7f050017;
-        public static final int buttonLastImpression=0x7f05000f;
+        public static final int buttonGetPicture=0x7f050018;
+        public static final int buttonLastImpression=0x7f050010;
         public static final int buttonSaveFile=0x7f050007;
-        public static final int buttonTrace=0x7f05000c;
-        public static final int buttonTrailMap=0x7f05000e;
-        public static final int buttonViewPictures=0x7f050010;
+        public static final int buttonTrace=0x7f05000d;
+        public static final int buttonTrailMap=0x7f05000f;
+        public static final int buttonViewPictures=0x7f050011;
         public static final int defaultFragmentTop=0x7f050006;
         public static final int hybrid=0x7f050004;
-        public static final int labelCheckTracerService=0x7f050012;
-        public static final int labelTrace=0x7f05000d;
+        public static final int labelCheckTracerService=0x7f050013;
+        public static final int labelTrace=0x7f05000e;
         public static final int lastImpressionFragmentTop=0x7f05000a;
-        public static final int listPictures=0x7f050014;
-        public static final int mainMenuFragmentTop=0x7f05000b;
+        public static final int listPictures=0x7f050015;
+        public static final int mainMenuFragmentTop=0x7f05000c;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
-        public static final int photoView=0x7f050019;
-        public static final int picturesFragmentTop=0x7f050013;
+        public static final int photoView=0x7f05001a;
+        public static final int picturesFragmentTop=0x7f050014;
         public static final int satellite=0x7f050002;
         public static final int terrain=0x7f050003;
-        public static final int testFragmentTop=0x7f050015;
-        public static final int textPictureURL=0x7f050016;
+        public static final int testFragmentTop=0x7f050016;
+        public static final int textPictureURL=0x7f050017;
         public static final int textView1=0x7f050009;
         public static final int topContainer=0x7f050005;
-        public static final int trailMap=0x7f050018;
+        public static final int trailMap=0x7f050019;
+        public static final int webViewPicture=0x7f05000b;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
