@@ -94,6 +94,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	
 	public static Picture getPictureFromCursor(Cursor cursor){
 		
+		if(cursor.getCount() <= 0)
+			return null;
+		
 		Picture picture = new Picture(
 				cursor.getString(cursor.getColumnIndex(KEY_URL)), 
 				cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)), 
@@ -202,6 +205,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return db.rawQuery(selectQuery, null);
 	}
 	
-	
-
+	public void clearPictures(){
+		SQLiteDatabase db = this.getReadableDatabase();
+		String deleteQuery = "DELETE * FROM "+TABLE_PICTURES;				
+		db.execSQL(deleteQuery);
+	}
 }

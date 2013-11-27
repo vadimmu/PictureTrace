@@ -34,7 +34,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
+
 
 public class TracerService extends Service{
 	
@@ -194,15 +194,13 @@ public class TracerService extends Service{
 	}
 		
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Toast.makeText(this, " TracerService has started", Toast.LENGTH_LONG).show();		
+	public int onStartCommand(Intent intent, int flags, int startId) {				
 		return super.onStartCommand(intent, flags, startId);
 	}
 		
 	@Override
 	public void onCreate() {
-		super.onCreate();
-		Toast.makeText(this, "TracerService has been created", Toast.LENGTH_LONG).show();
+		super.onCreate();		
 		Log.i("TracerService", "initPictureRetrieval()");
 		initPictureRetrieval(testRun);
 	}
@@ -214,9 +212,8 @@ public class TracerService extends Service{
 				mockLocationRunnable.setStopped(true);
 		}
 		
-		locationManager.removeUpdates(locationListener);
+		locationManager.removeUpdates(locationListener);		
 		
-		Toast.makeText(this, "TracerService has been destroyed", Toast.LENGTH_LONG).show();
 	}
 	
 		

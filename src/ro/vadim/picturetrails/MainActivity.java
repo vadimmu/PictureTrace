@@ -68,8 +68,7 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
-		GlobalData.unregisterBroadcastReceiver();
+		super.onDestroy();		
 	}
 	
 

@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    
     android:id="@+id/mainMenuFragmentTop"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
@@ -24,13 +23,31 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/buttonTrailMap"
+        android:id="@+id/buttonClearPictures"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:text="Clear Pictures" />
+
+    <TextView
+        android:id="@+id/labelCheckTracerService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonClearPictures"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="40dp"
+        android:text="service running?"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/buttonChecktTracerService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/labelCheckTracerService"
+        android:layout_alignBottom="@+id/labelCheckTracerService"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="Trail Map" />
+        android:text="Check" />
 
     <Button
         android:id="@+id/buttonLastImpression"
@@ -38,36 +55,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonTrailMap"
-        android:layout_marginTop="40dp"
+        android:layout_below="@+id/buttonTrace"
+        android:layout_marginTop="100dp"
         android:text="Last Impression" />
 
     <Button
         android:id="@+id/buttonViewPictures"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonTrailMap"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="40dp"
+        android:layout_below="@+id/buttonLastImpression"
+        android:layout_marginTop="40dp"
         android:text="All the pictures" />
-
-    <Button
-        android:id="@+id/buttonChecktTracerService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Check" />
-
-    <TextView
-        android:id="@+id/labelCheckTracerService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonChecktTracerService"
-        android:layout_alignBottom="@+id/buttonChecktTracerService"
-        android:layout_alignParentLeft="true"
-        android:text="service running?"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
     
 </RelativeLayout>

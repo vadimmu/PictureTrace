@@ -45,6 +45,7 @@ public class LastImpressionFragment extends BoilerplateFragment{
 		
 		if(picture == null)
 			return;
+		
 		setCurrentPicture(picture);
 		pictureWebView.loadUrl(picture.getUrl());
 	}

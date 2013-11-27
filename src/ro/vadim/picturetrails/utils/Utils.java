@@ -113,7 +113,27 @@ public class Utils {
 	    alert.show();
 	}
 	
-	
+	public static void buildAlertMessageAreYouSure(final Context context, final String message, final ToDo doAfter){
+		final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+	    
+	    builder.setMessage(message)
+	           .setCancelable(false)
+	           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	               public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {	            	    
+	            	   doAfter.doJob();
+	               }
+	           })
+	           .setNegativeButton("No", new DialogInterface.OnClickListener() {
+				
+	        	   @Override
+	        	   public void onClick(DialogInterface dialog, int which) {
+	        		   dialog.dismiss();		
+	        	   }
+			});
+	    
+	    final AlertDialog alert = builder.create();
+	    alert.show();
+	}
 	
 	
 	

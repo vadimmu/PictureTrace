@@ -5,6 +5,7 @@ import ro.vadim.picturetrails.R;
 import ro.vadim.picturetrails.test.MockLocationRunnable;
 import ro.vadim.picturetrails.trace.TracerService;
 import ro.vadim.picturetrails.utils.GlobalData;
+import ro.vadim.picturetrails.utils.ToDo;
 import ro.vadim.picturetrails.utils.Utils;
 import ro.vadim.picturetrails.visuals.BoilerplateFragment;
 import android.content.Intent;
@@ -23,11 +24,8 @@ public class MainMenuFragment extends BoilerplateFragment{
 	ToggleButton buttonTrace = null;
 	Button buttonCheckTracerService = null;
 	Button buttonCheckPhotos = null;
-	Button buttonTrailMap = null;
+	Button buttonClearPictures = null;
 	Button buttonLastImpression = null;
-	
-	
-	
 	
 	
 	
@@ -45,13 +43,19 @@ public class MainMenuFragment extends BoilerplateFragment{
 	}
 	
 	
-	private void initButtonTrailMap(View view){
-		buttonTrailMap = (Button)view.findViewById(R.id.buttonTrailMap);
-		buttonTrailMap.setOnClickListener(new OnClickListener() {
+	private void initButtonClearPictures(View view){
+		buttonClearPictures = (Button)view.findViewById(R.id.buttonClearPictures);
+		buttonClearPictures.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				GlobalData.getFragmentManager().loadFragment(TrailMapFragment.class.getCanonicalName(), null, null);
+				Utils.buildAlertMessageAreYouSure(getActivity(), "Delete all pictures ?", new ToDo() {
+					
+					@Override
+					public void doJob() {
+						GlobalData.getDatabase().clearPictures();						
+					}
+				});
 			}
 		});
 		
@@ -116,11 +120,12 @@ public class MainMenuFragment extends BoilerplateFragment{
 	}
 		
 	@Override
-	public void initComponents(View view){
-		initButtonCheckPhotos(view);
+	public void initComponents(View view){		
 		initButtonTrace(view);
 		initButtonCheckTracerService(view);
 		initButtonLastImpression(view);
+		initButtonCheckPhotos(view);
+		initButtonClearPictures(view);
 	}
 
 	

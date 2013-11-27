@@ -196,17 +196,17 @@ containing a value of this type.
     }
     public static final class id {
         public static final int action_settings=0x7f05001b;
-        public static final int buttonChecktTracerService=0x7f050012;
+        public static final int buttonChecktTracerService=0x7f050011;
+        public static final int buttonClearPictures=0x7f05000f;
         public static final int buttonDeleteFile=0x7f050008;
         public static final int buttonGetPicture=0x7f050018;
-        public static final int buttonLastImpression=0x7f050010;
+        public static final int buttonLastImpression=0x7f050012;
         public static final int buttonSaveFile=0x7f050007;
         public static final int buttonTrace=0x7f05000d;
-        public static final int buttonTrailMap=0x7f05000f;
-        public static final int buttonViewPictures=0x7f050011;
+        public static final int buttonViewPictures=0x7f050013;
         public static final int defaultFragmentTop=0x7f050006;
         public static final int hybrid=0x7f050004;
-        public static final int labelCheckTracerService=0x7f050013;
+        public static final int labelCheckTracerService=0x7f050010;
         public static final int labelTrace=0x7f05000e;
         public static final int lastImpressionFragmentTop=0x7f05000a;
         public static final int listPictures=0x7f050015;
