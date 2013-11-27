@@ -68,15 +68,10 @@ public class PhotoAdapter extends BaseAdapter{
             Picture picture = (Picture)getItem(position);                     
             holder = new PhotoHolder(row, picture);
             
-            if(picture.hasFile()){
-            	Log.i("PhotoAdapter", "loading image FILE: "+picture.getFileName());            
-            	holder.photoView.loadUrl("file:///"+picture.getFileName());
-            }
-            else{
-            	Log.i("PhotoAdapter", "loading image URL: "+picture.getFileName());            
-            	holder.photoView.loadUrl(picture.getUrl());            	
-            }
             
+            Log.i("PhotoAdapter", "loading image URL: "+picture.getUrl());            
+            holder.photoView.loadUrl(picture.getUrl());            	
+                        
             row.setTag(holder);
         }
         
@@ -106,40 +101,15 @@ public class PhotoAdapter extends BaseAdapter{
     		photoView.setOnLongClickListener(new OnLongClickListener() {				
 				@Override
 				public boolean onLongClick(View v) {
-						
 					
-					Utils.buildAlertMessagePictureOptions(GlobalData.getActivity(), thisPicture, new ToDo() {
-						
-						@Override
-						public void doJob() {
-							// TODO after save
-							
-						}
-					},
-					
-					
-					new ToDo() {
+					Utils.buildAlertMessageSavePicture(GlobalData.getActivity(), thisPicture, new ToDo() {
 						
 						@Override
 						public void doJob() {
-							// TODO after delete
-							
+							Log.i("PhotoAdapter", "saving picture to gallery: " + thisPicture.getUrl());
 						}
 					});
-					
-					
-					
-					/*
-					Utils.buildAlertMessageDeletePicture(GlobalData.getActivity(), thisPicture, new ToDo() {
-						
-						@Override
-						public void doJob() {
-							ListView list = (ListView)photoView.getParent().getParent();
-							list.setAdapter(new PhotoAdapter(GlobalData.getActivity()));
-							list.invalidate();
-						}
-					});
-					*/										
+															
 					return false;
 				}
 			});

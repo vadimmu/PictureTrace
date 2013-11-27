@@ -19,19 +19,16 @@ public class Picture{
 	private String url = "";
 	private String description = "";
 	private double latitude = 0.0;
-	private double longitude = 0.0;
-	private String fileName = null;
+	private double longitude = 0.0;	
 	private Date timestamp = null;
 	
 	
-	public Picture(String newUrl, String newDescription, double newLatitude, double newLongitude, String newFileName){		
+	public Picture(String newUrl, String newDescription, double newLatitude, double newLongitude){		
 		this.setUrl(newUrl);
 		this.setDescription(newDescription);
 		this.setLatitude(newLatitude);
 		this.setLongitude(newLongitude);
-		if(newFileName != null)
-			this.setFileName(newFileName);
-		
+				
 		setTimestamp(new Date());
 	}
 	
@@ -45,9 +42,7 @@ public class Picture{
 			pictureRepresentation.put("latitude", String.valueOf(getLatitude()));
 			pictureRepresentation.put("longitude", String.valueOf(getLongitude()));
 			pictureRepresentation.put("timestamp", String.valueOf(getTimestamp()));
-			
-			if(fileName != null)
-				pictureRepresentation.put("fileName", getFileName());
+						
 						
 			return JsonParser.getMapper().writeValueAsString(pictureRepresentation);			
 		} 
@@ -71,18 +66,9 @@ public class Picture{
 			newPicture = new Picture(pictureRepresentation.get("url"), 
 					pictureRepresentation.get("description"),
 					Double.valueOf(pictureRepresentation.get("latitude")),
-					Double.valueOf(pictureRepresentation.get("longitude")),
-					null);
+					Double.valueOf(pictureRepresentation.get("longitude")));
 			
 			newPicture.setTimestamp(new Date(Long.valueOf(pictureRepresentation.get("timestamp"))));
-			
-			String fileName = (String)pictureRepresentation.get("fileName");
-			if(fileName != null){
-				if(fileName.equals(""))
-					newPicture.setFileName(null);
-				else
-					newPicture.setFileName(fileName);
-			}
 			
 		}
 		
@@ -107,9 +93,7 @@ public class Picture{
 	}
 	
 	
-	public boolean hasFile(){
-		return (fileName != null);		
-	}
+	
 
 	public String getUrl() {
 		return url;
@@ -142,19 +126,7 @@ public class Picture{
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-
-
-	public String getFileName() {
-		if(fileName == null)
-			return "";
-		return fileName;
-	}
-
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
+	
 	public Date getTimestamp() {
 		return timestamp;
 	}

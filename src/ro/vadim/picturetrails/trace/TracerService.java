@@ -15,6 +15,7 @@ import java.util.Observer;
 
 
 
+import ro.vadim.picturetrails.database.DatabaseHelper;
 import ro.vadim.picturetrails.test.MockLocationProvider;
 import ro.vadim.picturetrails.test.MockLocationRunnable;
 import ro.vadim.picturetrails.utils.Picture;
@@ -46,6 +47,7 @@ public class TracerService extends Service{
 	private Picture lastPicture = null;
 	private LinkedList<Picture> pictures = new LinkedList<Picture>();
 	private PictureRetriever pictureRetriever = null;
+	private DatabaseHelper db = null;
 	
 	//Location management and retrieval
 	private static long minTimeMillis = 2000;
@@ -63,6 +65,7 @@ public class TracerService extends Service{
 	//testing
 	Thread mockLocationsThread = null;
 	MockLocationRunnable mockLocationRunnable = null;
+	
 	
 		
 	
@@ -131,24 +134,26 @@ public class TracerService extends Service{
 							
 							Picture picture = pictureRetriever.getRandomPictureInfo(thisLocation);				
 							
+							Log.i("TracerService", "inserting a picture into the database");
+							db.insertPicture(picture);
+							Log.i("TracerService",  "last picture: ");
+							Log.i("TracerService",  db.getLastPicture().toJson());
+							
+							/*
 							if(picture != null){									
 								Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");			
 								pictureIntent.putExtra("picture", picture.toJson());
 								sendBroadcast(pictureIntent);
 							}
-							
+							*/
 						}
 					});
 					
 					retrievePictureThread.start();
 					setLastLocation(location);
 				}
-				
-				
 			}
 		};
-				
-		
 		
 		
 		if(test){
@@ -173,10 +178,13 @@ public class TracerService extends Service{
 	}
 	
 	
+	
+	
+	
 	public TracerService() {
 		
-		pictureRetriever = new PictureRetriever(DEFAULT_PICTURE_SEARCH_RANGE);			
-		
+		pictureRetriever = new PictureRetriever(DEFAULT_PICTURE_SEARCH_RANGE);
+		db = new DatabaseHelper(this);		
 		Log.i("TracerService", "TracerService object initialized");
 		
 	}

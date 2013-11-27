@@ -141,8 +141,7 @@ public class PictureRetriever {
 						(String)photo.get("photo_file_url"),
 						(String)photo.get("photo_title"),
 						(Double)photo.get("latitude"),
-						(Double)photo.get("longitude"),
-						null
+						(Double)photo.get("longitude")
 				));
 			}
 		}

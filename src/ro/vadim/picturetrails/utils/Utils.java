@@ -78,71 +78,35 @@ public class Utils {
 	    alert.show();
 	}
 	
-	public static void buildAlertMessageDeletePicture(final Context context, final Picture picture, final ToDo doAfterDelete) {
+	public static void buildAlertMessageSavePicture(final Context context, final Picture picture, final ToDo doAfterSave) {
 	    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 	    
-	    builder.setMessage("Delete picture ?")
+	    builder.setMessage("Save picture ?")
 	           .setCancelable(false)
 	           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	               public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-	            	   GlobalData.deletePicture(picture);
-	            	   doAfterDelete.doJob();
+	            	   try {
+	            		   getPictureIntoGallery(picture);
+	            	   } 
+	   				
+	            	   catch (IOException e) {
+	            		   Log.e("Utils", "buildAlertMessagePictureOptions(): getPictureIntoGallery: error: "+e.toString());
+	            		   e.printStackTrace();
+	            	   } 
+	            	   doAfterSave.doJob();
 	               }
 	           })
 	           .setNegativeButton("No", new DialogInterface.OnClickListener() {
 				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();		
-				}
+	        	   @Override
+	        	   public void onClick(DialogInterface dialog, int which) {
+	        		   dialog.dismiss();		
+	        	   }
 			});
 	    
 	    final AlertDialog alert = builder.create();	    
 	    alert.show();
 	}
-	
-	public static void buildAlertMessagePictureOptions(final Context context, final Picture picture, final ToDo doAfterDelete, final ToDo doAfterSave){
-		
-		final Dialog optionsDialog = new Dialog(context);
-		optionsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		optionsDialog.setContentView(R.layout.custom_alert);
-		
-		Button saveFileButton = (Button)GlobalData.getActivity().findViewById(R.id.buttonSaveFile);
-		Button deleteFileButton = (Button)GlobalData.getActivity().findViewById(R.id.buttonDeleteFile);
-		
-		saveFileButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				try {
-					getPictureIntoGallery(picture);
-				} 
-				
-				catch (IOException e) {
-					Log.e("Utils", "buildAlertMessagePictureOptions(): getPictureIntoGallery: error: "+e.toString());
-					e.printStackTrace();
-				}
-				doAfterSave.doJob();
-				optionsDialog.dismiss();
-			}
-		});
-		
-		deleteFileButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				GlobalData.deletePicture(picture);
-         	   	doAfterDelete.doJob();
-			}
-		});
-		
-		optionsDialog.setCancelable(true);
-		optionsDialog.show();
-		
-	}
-	
-	
 	
 	
 	public static boolean isTracerServiceRunning(Activity activity) {
@@ -167,8 +131,7 @@ public class Utils {
 	public static void getPictureIntoGallery(Picture picture) throws IOException{
 		
 		Log.i("PhotoAdapter", "getPictureIntoGallery()");
-		File pictureFile = pictureRetriever.savePictureToFile(picture);
-		picture.setFileName(pictureFile.getAbsolutePath());
+		File pictureFile = pictureRetriever.savePictureToFile(picture);		
 		galleryAddPic(pictureFile);
 	}
 	
@@ -189,52 +152,5 @@ public class Utils {
 	    	    
 	    GlobalData.getActivity().sendBroadcast(mediaScanIntent);
 	}
-	
-	
-	
-		
-	private static void savePicturesToFiles(final View view){
-		
-		pictureRetriever = new PictureRetriever(null);
-		
-		Thread retrievalThread = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				synchronized (GlobalData.getPictures()) {
-					for(Picture picture : GlobalData.getPictures()){				
-						
-						if(!picture.hasFile()){
-				        	try {
-				        		
-				    			Log.e("PhotoAdapter", "saving the file into the gallery");
-				    			getPictureIntoGallery(picture);
-				    			
-							}
-				        	catch (IOException e) {
-								Log.e("PhotoAdapter", "file could not be created for the retrieved picture");
-								e.printStackTrace();
-							}
-				        }
-					}
-				}
-			}
-		});
-		
-		retrievalThread.start();
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

@@ -24,22 +24,29 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	private static final String KEY_LATITUDE = "latitude";
 	private static final String KEY_LONGITUDE = "longitude";
 	private static final String KEY_TIMESTAMP = "timestamp";
-		
+	
+	private static final String CREATE_TABLE_PICTURES = "CREATE TABLE "
+			+ TABLE_PICTURES + " ( " 
+			+ KEY_ID + " INTEGER PRIMARY KEY, "
+			+ KEY_URL + " TEXT, "
+			+ KEY_DESCRIPTION + " TEXT, "
+			+ KEY_LATITUDE + " TEXT, "
+			+ KEY_LONGITUDE + " TEXT, " 
+			+ KEY_TIMESTAMP + " TEXT " + " ) ";
+	
+	
+	
+	
+	
 	
 	
 	public DatabaseHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
+		
 	
 	
-	private static final String CREATE_TABLE_PICTURES = "CREATE TABLE "
-			+ TABLE_PICTURES + "(" 
-			+ KEY_ID + "INTEGER PRIMARY KEY"
-			+ KEY_URL + "TEXT"
-			+ KEY_DESCRIPTION + "TEXT"
-			+ KEY_LATITUDE + "TEXT"
-			+ KEY_LONGITUDE + "TEXT" 
-			+ KEY_TIMESTAMP + "TEXT" + ")";
+	
 	
 	
 	
@@ -51,15 +58,24 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_TABLE_PICTURES);		
 	}
+	
 
-	@Override
+	@Override	
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_PICTURES);		
 		onCreate(db);
 	}
 	
 	
+
+	
+	
+	
+	
 	public long insertPicture(Picture picture){
+		
+		if(picture == null)
+			return -1;
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		
@@ -75,19 +91,20 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	
 	
 	
+	
 	public Picture getPictureFromCursor(Cursor cursor){
 		
 		Picture picture = new Picture(
 				cursor.getString(cursor.getColumnIndex(KEY_URL)), 
 				cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)), 
 				Double.valueOf(cursor.getString(cursor.getColumnIndex(KEY_LATITUDE))), 
-				Double.valueOf(cursor.getString(cursor.getColumnIndex(KEY_LONGITUDE))), 
-				null);
+				Double.valueOf(cursor.getString(cursor.getColumnIndex(KEY_LONGITUDE))));
 		
 		
 		return picture;
 		
 	}
+	
 	
 	public Picture getPictureByID(long pictureID){
 		
@@ -105,6 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return getPictureFromCursor(cursor);				
 	}
 	
+	
 	public Picture getLastPicture(){
 		
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -120,6 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		cursor.moveToFirst();		
 		return getPictureFromCursor(cursor);		
 	}
+	
 	
 	public Picture[] getPicturesByCoordinates(double minLatitude, double minLongitude, double maxLatitude, double maxLongitude){
 		
@@ -151,18 +170,28 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return pictures;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public Picture[] getAllPictures(){
+		SQLiteDatabase db = this.getReadableDatabase();
+		String selectQuery = "SELECT * FROM "+TABLE_PICTURES + " ORDER BY "
+				+ KEY_ID + " DESC ";
+		
+		Log.i(LOG, selectQuery);
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		
+		if(cursor == null)
+			return null;
+		
+		Picture[] pictures = new Picture[cursor.getCount()];
+		int index = 0;
+		
+		while(!cursor.isAfterLast()){
+			pictures[index] = getPictureFromCursor(cursor);						
+			++index;
+			cursor.move(1);	
+		}
+		
+		return pictures;
+	}
 	
 	
 	

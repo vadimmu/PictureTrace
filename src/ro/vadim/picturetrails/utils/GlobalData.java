@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
+import ro.vadim.picturetrails.database.DatabaseHelper;
 import ro.vadim.picturetrails.trace.PictureRetriever;
 import ro.vadim.picturetrails.visuals.BoilerplateFragmentManager;
 import ro.vadim.picturetrails.visuals.FragmentManager;
@@ -33,6 +34,7 @@ public class GlobalData {
 	
 	private static BoilerplateFragmentManager fragmentManager = null;
 	private static TracerServiceBroadcastReceiver broadcastReceiver = null;
+	private static DatabaseHelper database = null;
 	
 	private static IntentFilter intentFilter = null;
 	private static ServiceConnection serviceConnection = null;
@@ -57,6 +59,10 @@ public class GlobalData {
 			Log.i("GlogalData", "TracerService is running !");
 		}
 		
+		if(getDatabase() == null){
+			setDatabase(new DatabaseHelper(getActivity()));
+		}
+		
 		setInitialized(true);
 	}
 	
@@ -77,56 +83,19 @@ public class GlobalData {
 		
 		Log.i("GlobalData", "saveTrace()");
 		
+		//TODO get trace into DB
 		
-		Log.i("GlobalData", "saveTrace(): traceFileName: "+traceFileName);
-		
-		File albumF = PictureRetriever.getAlbumDir();
-		File imageF = new File(albumF+"/"+traceFileName);
-				
-		Log.i("GlobalData", "saveTrace(): album name: "+albumF.getCanonicalPath());
-		Log.i("GlobalData", "saveTrace(): traceFileName: "+imageF.getCanonicalPath());
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(imageF));
-		
-		for(Picture picture : getPictures()){
-			
-			writer.write(picture.toJson()+"\n");
-			
-		}
-		
-		writer.close();		
 	}
 	
 	public static void loadTrace() throws IOException{
 		
 		Log.i("GlobalData", "loadTrace()");
 		
-		File albumF = PictureRetriever.getAlbumDir();
-		File imageF = new File(albumF+"/"+traceFileName);
-		
-		BufferedReader reader = new BufferedReader(new FileReader(imageF));
-		
-		String pictureJson = reader.readLine();
-		
-		while(pictureJson != null){
-			
-			Picture newPicture = Picture.fromJson(pictureJson);
-			Log.i("GlobalData", "loadTrace(): got picture: "+newPicture.getFileName());			
-			pictures.add(newPicture);
-			pictureJson = reader.readLine();
-		}
-		
-		reader.close();
+		//TODO get trace from DB
 	}
 	
-	public static void deletePicture(Picture picture){
-		synchronized (getPictures()) {
-			
-			File pictureFile = new File(picture.getFileName());
-			pictureFile.delete();			
-			getPictures().remove(picture);
-		}
-	}
+	
+	
 	
 	
 	public static Activity getActivity() {
@@ -169,7 +138,12 @@ public class GlobalData {
 		GlobalData.pictures = pictures;
 	}
 
-	
-	
+	public static DatabaseHelper getDatabase() {
+		return database;
+	}
 
+	public static void setDatabase(DatabaseHelper database) {
+		GlobalData.database = database;
+	}
+	
 }
