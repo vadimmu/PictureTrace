@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ro.vadim.picturetrails.R;
+import ro.vadim.picturetrails.database.DatabaseHelper;
 import ro.vadim.picturetrails.trace.PictureRetriever;
 import ro.vadim.picturetrails.utils.GlobalData;
 import ro.vadim.picturetrails.utils.Picture;
@@ -14,6 +15,7 @@ import ro.vadim.picturetrails.utils.Utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.location.Location;
 import android.net.Uri;
@@ -30,16 +32,23 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class PhotoAdapter extends BaseAdapter{
+public class PictureAdapter extends BaseAdapter{
 	
     Context context = null;
     int layoutResourceId = R.layout.listview_item_row;  
     ArrayList<View> rows = null;
+    DatabaseHelper db = null;
+    Cursor cursor = null;
     
-    
-    public PhotoAdapter(Context context) {
-        super();        
-        rows = new ArrayList<View>(GlobalData.getPictures().size());        
+    public PictureAdapter(Context context) {
+        super();
+        db = new DatabaseHelper(context);
+        cursor = db.getAllPictures_Cursor();
+        if(cursor != null)
+        	rows = new ArrayList<View>(cursor.getCount());
+        else 
+        	rows = new ArrayList<View>(0);
+        
         this.context = context;
     }
     
@@ -64,11 +73,12 @@ public class PhotoAdapter extends BaseAdapter{
         if(row == null){        	
             LayoutInflater inflater = GlobalData.getActivity().getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);                        
+                        
+            cursor.moveToPosition(position);
+            Picture picture = DatabaseHelper.getPictureFromCursor(cursor);                     
             
-            Picture picture = (Picture)getItem(position);                     
             holder = new PhotoHolder(row, picture);
-            
-            
+                        
             Log.i("PhotoAdapter", "loading image URL: "+picture.getUrl());            
             holder.photoView.loadUrl(picture.getUrl());            	
                         
@@ -118,12 +128,13 @@ public class PhotoAdapter extends BaseAdapter{
 
 	@Override
 	public int getCount() {		
-		return GlobalData.getPictures().size();
+		return cursor.getCount();
 	}
 
 	@Override
-	public Object getItem(int position) {		
-		return GlobalData.getPictures().get(getCount() - 1 - position);
+	public Object getItem(int position) {
+		cursor.moveToPosition(position);
+		return DatabaseHelper.getPictureFromCursor(cursor);
 	}
 
 	@Override

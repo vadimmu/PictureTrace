@@ -9,7 +9,7 @@ import ro.vadim.picturetrails.trace.PictureRetriever;
 import ro.vadim.picturetrails.utils.GlobalData;
 import ro.vadim.picturetrails.utils.Picture;
 import ro.vadim.picturetrails.visuals.BoilerplateFragment;
-import ro.vadim.picturetrails.visuals.PhotoAdapter;
+import ro.vadim.picturetrails.visuals.PictureAdapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -19,16 +19,15 @@ import android.widget.ListView;
 public class PhotoFragment extends BoilerplateFragment{
 	
 	ListView picturesView = null;
-	PhotoAdapter picturesAdapter = null;
+	PictureAdapter picturesAdapter = null;
 	
 	
-	private void initPicturesView(View view){		
-		
+	private void initPicturesView(View view){
 		
 		if(GlobalData.getPictures() == null)			
 			GlobalData.setPictures(new LinkedList<Picture>());
 		
-		picturesAdapter = new PhotoAdapter(getActivity());
+		picturesAdapter = new PictureAdapter(getActivity());
 		
 		picturesView = (ListView) view.findViewById(R.id.listPictures);
 		if(picturesView == null)

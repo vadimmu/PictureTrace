@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	private static final String CREATE_TABLE_PICTURES = "CREATE TABLE "
 			+ TABLE_PICTURES + " ( " 
 			+ KEY_ID + " INTEGER PRIMARY KEY, "
-			+ KEY_URL + " TEXT, "
+			+ KEY_URL + " TEXT UNIQUE, "
 			+ KEY_DESCRIPTION + " TEXT, "
 			+ KEY_LATITUDE + " TEXT, "
 			+ KEY_LONGITUDE + " TEXT, " 
@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	
 	
 	
-	public Picture getPictureFromCursor(Cursor cursor){
+	public static Picture getPictureFromCursor(Cursor cursor){
 		
 		Picture picture = new Picture(
 				cursor.getString(cursor.getColumnIndex(KEY_URL)), 
@@ -193,6 +193,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return pictures;
 	}
 	
+	public Cursor getAllPictures_Cursor(){
+		SQLiteDatabase db = this.getReadableDatabase();
+		String selectQuery = "SELECT * FROM "+TABLE_PICTURES + " ORDER BY "
+				+ KEY_ID + " DESC ";
+		
+		Log.i(LOG, selectQuery);
+		return db.rawQuery(selectQuery, null);
+	}
 	
 	
 
