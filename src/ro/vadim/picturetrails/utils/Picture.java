@@ -23,6 +23,7 @@ public class Picture{
 	private String fileName = null;
 	private Date timestamp = null;
 	
+	
 	public Picture(String newUrl, String newDescription, double newLatitude, double newLongitude, String newFileName){		
 		this.setUrl(newUrl);
 		this.setDescription(newDescription);

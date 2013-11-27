@@ -1,20 +1,15 @@
 package ro.vadim.picturetrails.visuals.fragments;
 
-
-
-import java.util.HashMap;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import ro.vadim.picturetrails.R;
-import ro.vadim.picturetrails.visuals.BoilerplateFragment;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+
 
 public class TrailMapFragment extends MapFragment{
 	
@@ -36,7 +31,6 @@ public class TrailMapFragment extends MapFragment{
 		mapContainer.addView(mapFragmentView, new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
 		return mapContainer;
-	}
-	
+	}	
 	
 }
