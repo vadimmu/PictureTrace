@@ -22,6 +22,8 @@ import android.util.Log;
  */
 public abstract class BoilerplateFragmentManager{
 	
+	private static String TAG = "BoilerplateFragmentManager";
+	
 	private FragmentActivity activity = null;
 	private Fragment currentFragment = null;
 	private final int DEFAULT_NUMBER_OF_LAYOUTS = 10;	
@@ -65,15 +67,15 @@ public abstract class BoilerplateFragmentManager{
 		} 
 		
 		catch (ClassNotFoundException e) {
-			Log.e("BoilerplateFragmentManager", "loadFragment: class \""+fragmentClassName+"\" could not be found !");
-			Log.e("BoilerplateFragmentManager", "loadFragment: "+e.toString());
+			Log.e(TAG, "loadFragment: class \""+fragmentClassName+"\" could not be found !");
+			Log.e(TAG, "loadFragment: "+e.toString());
 			return false;
 		}
 		
 		
 		Class superClass = currentClass.getSuperclass();
 		if( ! superClass.equals(BoilerplateFragment.class)){
-			Log.e("BoilerplateFragmentManager", "loadFragment: class \""+fragmentClassName+"\" is not a valid subclass of BoilerplateFragment !");			
+			Log.e(TAG, "loadFragment: class \""+fragmentClassName+"\" is not a valid subclass of BoilerplateFragment !");			
 			return false;
 		}
 		
@@ -82,7 +84,7 @@ public abstract class BoilerplateFragmentManager{
 		
 		try {
 			newFragment = (BoilerplateFragment)currentClass.newInstance();
-			Log.i("BoilerplateFragmentManager", "loadFragment: loadFragment: newFragment class: "+newFragment.getClass().getCanonicalName());
+			Log.i(TAG, "loadFragment: loadFragment: newFragment class: "+newFragment.getClass().getCanonicalName());
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 			
 			if( (exitAnimation != null) && (enterAnimation != null) )
@@ -98,12 +100,12 @@ public abstract class BoilerplateFragmentManager{
 			return true;
 		}
 		catch (InstantiationException e) {
-			Log.e("BoilerplateFragmentManager", "loadFragment: class \""+fragmentClassName+"\" could not be instantiated !");
-			Log.e("BoilerplateFragmentManager", "loadFragment: "+e.toString());
+			Log.e(TAG, "loadFragment: class \""+fragmentClassName+"\" could not be instantiated !");
+			Log.e(TAG, "loadFragment: "+e.toString());
 			return false;
 		}
 		catch (IllegalAccessException e) {
-			Log.e("BoilerplateFragmentManager", "loadFragment: "+e.toString());
+			Log.e(TAG, "loadFragment: "+e.toString());
 			return false;
 		}
 		
@@ -137,7 +139,7 @@ public abstract class BoilerplateFragmentManager{
 			return resourceID.intValue();
 		}
 		
-		Log.i("BoilerplateFragmentManager", "getLayoutForFragment: Could not get layout. Providing default.");
+		Log.i(TAG, "getLayoutForFragment: Could not get layout. Providing default.");
 		
 		return R.layout.layout_default;
 	}

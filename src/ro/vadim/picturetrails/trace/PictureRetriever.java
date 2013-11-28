@@ -16,6 +16,7 @@ import android.util.Log;
 
 public class PictureRetriever {
 
+	private static String TAG = "PictureRetriever";
 	
 	private static final String DEFAULT_ALBUM_NAME = "PictureTrace";
 	private static final String JPEG_FILE_PREFIX = "IMG_";
@@ -66,8 +67,8 @@ public class PictureRetriever {
 	public double[] getPositionRanges(Location initialLocation, Integer offset){
 		
 				
-		Log.i("Tracer", "getPositionRanges(): offset = "+String.valueOf(offset));
-		Log.i("Tracer", "getPositionRanges(): offset/ONE_DEGREE = "+String.valueOf((double)offset / ONE_DEGREE));
+		Log.i(TAG, "getPositionRanges(): offset = "+String.valueOf(offset));
+		Log.i(TAG, "getPositionRanges(): offset/ONE_DEGREE = "+String.valueOf((double)offset / ONE_DEGREE));
 		
 		double [] ranges = new double[4];
 		
@@ -89,7 +90,7 @@ public class PictureRetriever {
 			httpRequester = new HttpRequester();
 		
 		
-		Log.i("TracerService", "getResponseString()");
+		Log.i(TAG, "getResponseString()");
 		
 		String minLatitudeString = String.valueOf(minLatitude);
 		String maxLatitudeString = String.valueOf(maxLatitude);
@@ -98,7 +99,7 @@ public class PictureRetriever {
 		String minLongitudeString = String.valueOf(minLongitude);
 		String maxLongitudeString = String.valueOf(maxLongitude);
 		
-		Log.i("TracerService", "getResponseString(): between "+minLatitudeString+", "+minLongitudeString+
+		Log.i(TAG, "getResponseString(): between "+minLatitudeString+", "+minLongitudeString+
 															" and "+maxLatitudeString+", "+maxLongitudeString);
 		
 		
@@ -112,14 +113,12 @@ public class PictureRetriever {
 		"maxy="+maxLatitudeString+"&"+
 		"size=small&mapfilter=true";
 		
-		Log.i("TracerService", "getResponseString(): request url: "+url);
+		Log.i(TAG, "getResponseString(): request url: "+url);
 		try {			
 			return httpRequester.sendGet(url);
-		}
+		}		
 		
-		
-		catch (Exception e) {
-			System.out.println("requester.sendGet(): "+e.toString());
+		catch (Exception e) {			
 			e.printStackTrace();
 			return null;
 		}		
@@ -127,7 +126,7 @@ public class PictureRetriever {
 	
 	public ArrayList<Picture> getPictures(String responseString){
 		
-		Log.i("TracerService", "getPictures(): responseString: "+responseString);
+		Log.i(TAG, "getPictures(): responseString: "+responseString);
 		
 		ArrayList<Picture> pictures = new ArrayList<Picture>(PICTURES_TO - PICTURES_FROM + 1);
 				
@@ -146,7 +145,7 @@ public class PictureRetriever {
 			}
 		}
 		
-		Log.i("Tracer", "getPictures(): "+String.valueOf(pictures.size())+" retrieved pictures");
+		Log.i(TAG, "getPictures(): "+String.valueOf(pictures.size())+" retrieved pictures");
 		return pictures;		
 	}
 	
@@ -154,18 +153,18 @@ public class PictureRetriever {
 		
 		ArrayList<Picture> pictures = getPictures(responseString);
 		if(pictures.size() > 0){
-			Log.i("Tracer", "getFirstPicture(): "+pictures.get(0).getUrl());			
+			Log.i(TAG, "getFirstPicture(): "+pictures.get(0).getUrl());			
 			return pictures.get(0);
 		}
 		
-		Log.i("Tracer", "getFirstPicture(): NULL");
+		Log.i(TAG, "getFirstPicture(): NULL");
 		return null;
 		
 	}
 	
 	public Picture getFirstPictureInfo(Location myLocation){
 		
-		Log.i("TracerService", "getFirstPicture(): location: "+
+		Log.i(TAG, "getFirstPicture(): location: "+
 				String.valueOf(myLocation.getLatitude())+ ", "+
 				String.valueOf(myLocation.getLongitude()));
 		
@@ -183,15 +182,15 @@ public class PictureRetriever {
 		if(pictures.size() > 0){
 			
 			int index = (int)(Math.random()*pictures.size());			
-			Log.i("Tracer", "getFirstPicture(): "+pictures.get(index).getUrl());			
+			Log.i(TAG, "getFirstPicture(): "+pictures.get(index).getUrl());			
 			return pictures.get(index);
 		}
-		Log.i("Tracer", "getRandomPicture(): NULL");
+		Log.i(TAG, "getRandomPicture(): NULL");
 		return null;
 	}
 	
 	public Picture getRandomPictureInfo(Location myLocation){
-		Log.i("TracerService", "getFirstPicture(): location: "+
+		Log.i(TAG, "getFirstPicture(): location: "+
 				String.valueOf(myLocation.getLatitude())+ ", "+
 				String.valueOf(myLocation.getLongitude()));
 		
@@ -222,17 +221,17 @@ public class PictureRetriever {
 		File storageDir = null;
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Log.i("TracerService", "the external storage is mounted...");
+			Log.i(TAG, "the external storage is mounted...");
 			storageDir = getAlbumStorageDir(DEFAULT_ALBUM_NAME);
 			if(!storageDir.exists())
 				storageDir.mkdirs();
 						
-			Log.i("TracerService", "the external storage directory: " + storageDir.getCanonicalPath());
+			Log.i(TAG, "the external storage directory: " + storageDir.getCanonicalPath());
 			
 			if (storageDir != null) {
 				if (! storageDir.mkdirs()) {
 					if (! storageDir.exists()){
-						Log.d("TracerService", "failed to create picture directory");
+						Log.d(TAG, "failed to create picture directory");
 						return null;
 					}
 				}
@@ -240,7 +239,7 @@ public class PictureRetriever {
 			
 		} 
 		else {
-			Log.v("TracerService", "External storage is not mounted READ/WRITE.");
+			Log.v(TAG, "External storage is not mounted READ/WRITE.");
 		}
 		
 		return storageDir;
@@ -255,14 +254,14 @@ public class PictureRetriever {
 		
 		String imageFileName = JPEG_FILE_PREFIX + timeStamp;
 		
-		Log.i("TracerService", "createImageFile(): imageFileName: "+imageFileName);
+		Log.i(TAG, "createImageFile(): imageFileName: "+imageFileName);
 				
 		File albumF = getAlbumDir();
 		File imageF = new File(albumF+"/"+imageFileName+JPEG_FILE_SUFFIX);
 		
 		
-		Log.i("TracerService", "createImageFile(): album name: "+albumF.getCanonicalPath());
-		Log.i("TracerService", "createImageFile(): image name: "+imageF.getCanonicalPath());
+		Log.i(TAG, "createImageFile(): album name: "+albumF.getCanonicalPath());
+		Log.i(TAG, "createImageFile(): image name: "+imageF.getCanonicalPath());
 		
 		return imageF;
 	}
@@ -272,7 +271,7 @@ public class PictureRetriever {
 	public File savePictureToFile(Picture picture) throws IOException{
 		
 		if(picture == null){
-			Log.i("TracerService", "onLocationChanged(): no picture available for this location !");
+			Log.i(TAG, "onLocationChanged(): no picture available for this location !");
 			return null;
 		}
 				

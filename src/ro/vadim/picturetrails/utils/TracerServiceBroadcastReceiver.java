@@ -11,10 +11,12 @@ import android.widget.Toast;
 
 public class TracerServiceBroadcastReceiver extends BroadcastReceiver{
 	
+	public static String TAG = "TracerServiceBroadcastReceiver";
+	
 	
 	public TracerServiceBroadcastReceiver() {
 		super();
-		Log.i("TracerServiceBroadcastReceiver", "broadcastReceiver started !");
+		Log.i(TAG, "broadcastReceiver started !");
 	}
 	
 	public void handleIntent(Intent intent){

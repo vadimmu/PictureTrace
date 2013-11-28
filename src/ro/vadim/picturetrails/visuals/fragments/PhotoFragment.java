@@ -31,10 +31,10 @@ public class PhotoFragment extends BoilerplateFragment{
 		
 		picturesView = (ListView) view.findViewById(R.id.listPictures);
 		if(picturesView == null)
-			Log.i("PhotoFragment", "picturesView = null !");
+			Log.i(TAG, "picturesView = null !");
 		
 		if(picturesAdapter == null)
-			Log.i("PhotoFragment", "picturesAdapter = null !");
+			Log.i(TAG, "picturesAdapter = null !");
 		
 		picturesView.setAdapter(picturesAdapter);
 		

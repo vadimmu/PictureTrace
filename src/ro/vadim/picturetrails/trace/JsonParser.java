@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonParser {
     
+	private static String TAG = "JsonParser";
+	
     private static JsonParser parser = null;
     
     private static ObjectMapper mapper = null;
@@ -37,13 +39,13 @@ public class JsonParser {
 	    }
 	    
 	    catch (JsonParseException e) {
-	            Log.println(Log.WARN, "JSON ERROR (JsonParseException) (original message) : ", message);
-	        Log.println(Log.WARN, "JSON ERROR (JsonParseException)", e.toString());
+	    	Log.w(TAG, "JSON ERROR (JsonParseException) (original message) : "+message);
+	        Log.w(TAG, "JSON ERROR (JsonParseException): "+e.toString());	        
 	    }
 	    
 	    catch (JsonMappingException e) {
-	        Log.println(Log.WARN, "JSON ERROR (JsonMappingException) (original message) : ", message);
-	        Log.println(Log.WARN, "JSON ERROR (JsonMappingException)", e.toString());
+	    	Log.w(TAG, "JSON ERROR (JsonMappingException) (original message) : "+message);
+	        Log.w(TAG, "JSON ERROR (JsonMappingException): "+e.toString());
 	    }
 	                    
 	    finally{         
@@ -62,13 +64,14 @@ public class JsonParser {
 	    }
 	    
 	    catch (JsonParseException e) {
-	            Log.println(Log.WARN, "JSON ERROR (JsonParseException) (original message) : ", message);
-	        Log.println(Log.WARN, "JSON ERROR (JsonParseException)", e.toString());
+	    	Log.w(TAG, "JSON ERROR (JsonParseException) (original message) : "+message);
+	        Log.w(TAG, "JSON ERROR (JsonParseException): "+e.toString());
+	            
 	    }
 	    
 	    catch (JsonMappingException e) {
-	        Log.println(Log.WARN, "JSON ERROR (JsonMappingException) (original message) : ", message);
-	        Log.println(Log.WARN, "JSON ERROR (JsonMappingException)", e.toString());
+	    	Log.w(TAG, "JSON ERROR (JsonMappingException) (original message) : "+message);
+	        Log.w(TAG, "JSON ERROR (JsonMappingException): "+e.toString());
 	    }
 	                    
 	    finally{

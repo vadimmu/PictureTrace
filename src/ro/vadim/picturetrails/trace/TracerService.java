@@ -38,6 +38,8 @@ import android.util.Log;
 
 public class TracerService extends Service{
 	
+	private static String TAG = "TracerService";
+	
 	private final int DEFAULT_PICTURE_SEARCH_RANGE = 50;//meters
 	private final int DEFAULT_PICTURE_TRACE_DISTANCE = 100; //meters
 	private int pictureTraceDistance = DEFAULT_PICTURE_TRACE_DISTANCE;
@@ -60,7 +62,7 @@ public class TracerService extends Service{
 	//lifecycle management
 	private boolean paused = false;
 	private boolean stopped = false;
-	private boolean testRun = true;
+	private boolean testRun = false;
 	
 	//testing
 	Thread mockLocationsThread = null;
@@ -79,7 +81,7 @@ public class TracerService extends Service{
 			mockLocationsThread.start();
 		}
 			
-		Log.i("TracerService", "initPictureRetrieval()");
+		Log.i(TAG, "initPictureRetrieval()");
 		
 		
 		
@@ -114,16 +116,16 @@ public class TracerService extends Service{
 			@Override
 			public void onLocationChanged(Location location) {
 								
-				Log.i("TracerService", "LocationListener.onLocationChanged(): LOCATION CHANGED !");				
+				Log.i(TAG, "LocationListener.onLocationChanged(): LOCATION CHANGED !");				
 				
 				if(getLastLocation() == null){
-					Log.i("TracerService", "LastLocation = null !");
+					Log.i(TAG, "LastLocation = null !");
 					setLastLocation(location);
 				}
 				
 				else if(getDistanceBetweenPositions(location, getLastLocation()) >= pictureTraceDistance){
 					
-					Log.i("TracerService", "LocationListener.onLocationChanged(): location changed and satisfies the distance crieria!");					
+					Log.i(TAG, "LocationListener.onLocationChanged(): location changed and satisfies the distance crieria!");					
 					final Location thisLocation = location;
 					
 					Thread retrievePictureThread = new Thread(new Runnable() {
@@ -134,7 +136,7 @@ public class TracerService extends Service{
 							
 							Picture picture = pictureRetriever.getRandomPictureInfo(thisLocation);				
 							
-							Log.i("TracerService", "inserting a picture into the database");
+							Log.i(TAG, "inserting a picture into the database");
 							db.insertPicture(picture);
 							
 							if(picture != null){									
@@ -181,7 +183,7 @@ public class TracerService extends Service{
 		
 		pictureRetriever = new PictureRetriever(DEFAULT_PICTURE_SEARCH_RANGE);
 		db = new DatabaseHelper(this);		
-		Log.i("TracerService", "TracerService object initialized");
+		Log.i(TAG, "TracerService object initialized");
 		
 	}
 	
@@ -198,7 +200,7 @@ public class TracerService extends Service{
 	@Override
 	public void onCreate() {
 		super.onCreate();		
-		Log.i("TracerService", "initPictureRetrieval()");
+		Log.i(TAG, "initPictureRetrieval()");
 		initPictureRetrieval(testRun);
 	}
 		

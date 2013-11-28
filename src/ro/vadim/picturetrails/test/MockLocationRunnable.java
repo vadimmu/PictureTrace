@@ -6,6 +6,9 @@ import android.location.LocationManager;
 import android.util.Log;
 
 public class MockLocationRunnable implements Runnable{
+	
+	private static String TAG = "MockLocationRunnable";
+	
 	private int SLEEP_TIME = 1000; 
 	private boolean stopped = false;
 	private MockLocationProvider mock = null;
@@ -23,7 +26,7 @@ public class MockLocationRunnable implements Runnable{
 	@Override
 	public void run() {
 		
-		Log.e("MockLocationRunnable", "run()");
+		Log.e(TAG, "run()");
 		
 		mock = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, ctx);		
 		
@@ -36,7 +39,7 @@ public class MockLocationRunnable implements Runnable{
 			}
 			
 			catch (InterruptedException e) {
-				Log.e("MockLocationRunnable", "run(): can't sleep: "+e.toString());
+				Log.e(TAG, "run(): can't sleep: "+e.toString());
 				e.printStackTrace();
 			}
 			
@@ -58,7 +61,7 @@ public class MockLocationRunnable implements Runnable{
 
 
 	public void setStopped(boolean stopped) {
-		Log.e("MockLocationRunnable", "setStopped( "+String.valueOf(stopped)+" )");
+		Log.e(TAG, "setStopped( "+String.valueOf(stopped)+" )");
 		this.stopped = stopped;
 	}
 

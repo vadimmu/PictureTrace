@@ -28,6 +28,9 @@ import android.util.Log;
 
 public class GlobalData {
 	
+	
+	private static String TAG = "GlobalData";
+	
 	private static String traceFileName = "tracefile.txt";
 	
 	private static Activity activity = null;
@@ -41,12 +44,11 @@ public class GlobalData {
 	private static boolean initialized = false;	
 	private static LinkedList<Picture> pictures = new LinkedList<Picture>();
 	
-	
-	
+		
 	public static void initGlobal(FragmentActivity activity){
 		
 		if(isInitialized()){
-			Log.i("GlobalData", "the global data components are already initialized !");			
+			Log.i(TAG, "the global data components are already initialized !");			
 			return;
 		}
 		if(getFragmentManager() == null)
@@ -56,7 +58,7 @@ public class GlobalData {
 		setActivity(activity);		
 		
 		if(Utils.isTracerServiceRunning(getActivity())){
-			Log.i("GlogalData", "TracerService is running !");
+			Log.i(TAG, "TracerService is running !");
 		}
 		
 		if(getDatabase() == null){
@@ -74,15 +76,21 @@ public class GlobalData {
 	}
 	
 	public static void unregisterBroadcastReceiver(){
-		if(broadcastReceiver != null)
-			getActivity().unregisterReceiver(broadcastReceiver);
+		if(broadcastReceiver != null){
+			try{
+				getActivity().unregisterReceiver(broadcastReceiver);
+			}
+			catch(IllegalArgumentException e){
+				Log.e(TAG, "broadcast receiver was never registered or has already been unregistered");
+			}
+		}
 		
 	}
 	
 	
 	public static void saveTrace() throws IOException{
 		
-		Log.i("GlobalData", "saveTrace()");
+		Log.i(TAG, "saveTrace()");
 		
 		//TODO get trace into DB
 		
@@ -90,7 +98,7 @@ public class GlobalData {
 	
 	public static void loadTrace() throws IOException{
 		
-		Log.i("GlobalData", "loadTrace()");
+		Log.i(TAG, "loadTrace()");
 		
 		//TODO get trace from DB
 	}

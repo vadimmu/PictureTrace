@@ -29,6 +29,9 @@ import android.widget.Button;
 
 public class Utils {
 
+	
+	private static String TAG = "Utils";
+	
 	public static PictureRetriever pictureRetriever = new PictureRetriever(null);
 	
 	
@@ -95,7 +98,7 @@ public class Utils {
 	            	   } 
 	   				
 	            	   catch (IOException e) {
-	            		   Log.e("Utils", "buildAlertMessagePictureOptions(): getPictureIntoGallery: error: "+e.toString());
+	            		   Log.e(TAG, "buildAlertMessagePictureOptions(): getPictureIntoGallery: error: "+e.toString());
 	            		   e.printStackTrace();
 	            	   } 
 	            	   doAfterSave.doJob();

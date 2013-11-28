@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 
 public abstract class BoilerplateFragment extends Fragment{
 	
+	protected String TAG = this.getClass().getName();
 	private int layout = -1;
 	private String backFragment = null;
-	
-	
-	
 	
 	
 	public abstract void initComponents(View view);
@@ -24,6 +22,7 @@ public abstract class BoilerplateFragment extends Fragment{
 	
 	
 	public BoilerplateFragment(){
+		
 		super();		
 	}
 	
@@ -35,9 +34,9 @@ public abstract class BoilerplateFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
     	
-    	Log.i("BoilerplateFragment", "getting resourceID");
+    	Log.i(TAG, "getting resourceID");
     	int resourceID = GlobalData.getFragmentManager().getLayoutForFragment(this.getClass().getCanonicalName());
-    	Log.i("BoilerplateFragment", "getting resourceID: "+String.valueOf(resourceID));
+    	Log.i(TAG, "getting resourceID: "+String.valueOf(resourceID));
     	
     	View view = inflater.inflate(resourceID, container, false);
         initComponents(view);                
@@ -62,8 +61,8 @@ public abstract class BoilerplateFragment extends Fragment{
 		} 
 		
 		catch (ClassNotFoundException e) {
-			Log.e("BoilerplateFragment", "setBackFragment: could not set the back fragment from this fragment.");
-			Log.e("BoilerplateFragment", "setBackFragment: "+e.toString());
+			Log.e(TAG, "setBackFragment: could not set the back fragment from this fragment.");
+			Log.e(TAG, "setBackFragment: "+e.toString());
 			
 			this.backFragment = null;
 		}

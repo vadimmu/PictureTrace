@@ -34,6 +34,8 @@ import android.widget.RelativeLayout;
 
 public class PictureAdapter extends BaseAdapter{
 	
+	private static String TAG = "PictureAdapter";
+	
     Context context = null;
     int layoutResourceId = R.layout.listview_item_row;  
     ArrayList<View> rows = null;
@@ -79,7 +81,7 @@ public class PictureAdapter extends BaseAdapter{
             
             holder = new PhotoHolder(row, picture);
                         
-            Log.i("PhotoAdapter", "loading image URL: "+picture.getUrl());            
+            Log.i(TAG, "loading image URL: "+picture.getUrl());            
             holder.photoView.loadUrl(picture.getUrl());            	
                         
             row.setTag(holder);
@@ -116,7 +118,7 @@ public class PictureAdapter extends BaseAdapter{
 						
 						@Override
 						public void doJob() {
-							Log.i("PhotoAdapter", "saving picture to gallery: " + thisPicture.getUrl());
+							Log.i(TAG, "saving picture to gallery: " + thisPicture.getUrl());
 						}
 					});
 															

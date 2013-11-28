@@ -16,6 +16,8 @@ import ro.vadim.picturetrails.trace.JsonParser;
 
 public class Picture{
 	
+	private static String TAG = "Picture";
+	
 	private String url = "";
 	private String description = "";
 	private double latitude = 0.0;
@@ -48,7 +50,7 @@ public class Picture{
 		} 
 		
 		catch (JsonProcessingException e) {
-			Log.e("Picture", "toJson(): cannot serialize: "+e.toString());
+			Log.e(TAG, "toJson(): cannot serialize: "+e.toString());
 			e.printStackTrace();
 			return null;
 		}
@@ -73,17 +75,17 @@ public class Picture{
 		}
 		
 		catch (JsonParseException e) {
-			Log.e("Picture", "fromJson(): cannot deserialize: "+e.toString());
+			Log.e(TAG, "fromJson(): cannot deserialize: "+e.toString());
 			e.printStackTrace();
 		} 
 		
 		catch (JsonMappingException e) {
-			Log.e("Picture", "fromJson(): cannot deserialize: "+e.toString());
+			Log.e(TAG, "fromJson(): cannot deserialize: "+e.toString());
 			e.printStackTrace();
 		}
 		
 		catch (IOException e) {
-			Log.e("Picture", "fromJson(): cannot deserialize: "+e.toString());
+			Log.e(TAG, "fromJson(): cannot deserialize: "+e.toString());
 			e.printStackTrace();
 		}
 		

@@ -8,6 +8,7 @@ import android.util.Log;
 
 public class MockLocationProvider {
 	
+	public static String TAG = "MockLocationProvider";
 	public static String providerName;
 	Location completeLocationObject = null;
 	Context ctx;
@@ -70,7 +71,7 @@ public class MockLocationProvider {
 		    lm.setTestProviderLocation(providerName, mockLocation);
 		}
 		catch(IllegalArgumentException e){
-			Log.e("MockLocationProvider", "pushLocation(): IllegalArgumentException: "+e.toString());
+			Log.e(TAG, "pushLocation(): IllegalArgumentException: "+e.toString());
 			e.printStackTrace();
 		}
 		
@@ -83,7 +84,7 @@ public class MockLocationProvider {
 		    lm.removeTestProvider(providerName);
 		}
 		catch(IllegalArgumentException e){
-			Log.e("MockLocationProvider", "shutdown(): IllegalArgumentException: "+e.toString());
+			Log.e(TAG, "shutdown(): IllegalArgumentException: "+e.toString());
 			e.printStackTrace();
 		}
 	}

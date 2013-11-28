@@ -24,6 +24,7 @@ import android.util.Log;
 
 public class HttpRequester {
         
+	private static String TAG = "HttpRequester";
     private static final String DEFAULT_USER_AGENT = "Mozilla/5.0";
     
     private HttpClient httpClient = null;
@@ -49,15 +50,15 @@ public class HttpRequester {
         }
         
         catch(ClientProtocolException e) {
-            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+            Log.e(TAG, "sendGet() error: "+e.toString());
         }
         
         catch(IOException e) {
-            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+            Log.e(TAG, "sendGet() error: "+e.toString());
         }
         
         catch(Exception e){
-            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+            Log.e(TAG, "sendGet() error: "+e.toString());
         }
         
         finally{
@@ -81,7 +82,7 @@ public class HttpRequester {
             
             int responseCode = response.getStatusLine().getStatusCode();
             
-            Log.i("HttpRequester", "getPicture: response code: "+String.valueOf(responseCode));
+            Log.i(TAG, "getPicture: response code: "+String.valueOf(responseCode));
             
             
     		FileOutputStream out = new FileOutputStream(pictureFile);
@@ -91,15 +92,15 @@ public class HttpRequester {
         }
         
         catch(ClientProtocolException e) {
-            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+            Log.e(TAG, "sendGet() error: "+e.toString());
         }
         
         catch(IOException e) {
-            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+            Log.e(TAG, "sendGet() error: "+e.toString());
         }
         
         catch(Exception e){
-            Log.e("HttpRequester", "sendGet() error: "+e.toString());
+            Log.e(TAG, "sendGet() error: "+e.toString());
         }
     }
     

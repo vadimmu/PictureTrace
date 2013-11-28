@@ -96,11 +96,11 @@ public class MainMenuFragment extends BoilerplateFragment{
 		buttonTrace = (ToggleButton)view.findViewById(R.id.buttonTrace);
 		
 		if(!Utils.isTracerServiceRunning(getActivity())){
-			Log.i("MainMenuFragment", "TracerService is NOT running");
+			Log.i(TAG, "TracerService is NOT running");
 			buttonTrace.setChecked(false);
 		}
 		else{
-			Log.i("MainMenuFragment", "TracerService is already running !");
+			Log.i(TAG, "TracerService is already running !");
 			buttonTrace.setChecked(true);
 		}
 		
@@ -109,7 +109,7 @@ public class MainMenuFragment extends BoilerplateFragment{
 			@Override
 			public void onClick(View v) {
 				
-				Log.i("MainMenuFragment", "buttonTrace was clicked !");
+				Log.i(TAG, "buttonTrace was clicked !");
 				
 				if(buttonTrace.isChecked())
 					Utils.startTracerService(getActivity());

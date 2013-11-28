@@ -11,8 +11,7 @@ import ro.vadim.picturetrails.utils.Utils;
 import ro.vadim.picturetrails.visuals.BoilerplateFragment;
 
 public class LastImpressionFragment extends BoilerplateFragment{
-	
-	private static final String TAG = "LastImpressionFragment";
+		
 	private WebView pictureWebView = null;
 	private Picture currentPicture = null;
 	
