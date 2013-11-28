@@ -5,7 +5,6 @@ import ro.vadim.picturetrails.R.layout;
 import ro.vadim.picturetrails.visuals.fragments.LastImpressionFragment;
 import ro.vadim.picturetrails.visuals.fragments.MainMenuFragment;
 import ro.vadim.picturetrails.visuals.fragments.PhotoFragment;
-import ro.vadim.picturetrails.visuals.fragments.TrailMapFragment;
 import android.util.Log;
 
 
@@ -16,8 +15,7 @@ public class FragmentManager extends BoilerplateFragmentManager{
 	public boolean registerFragmentLayouts() {		
 		setLayoutForFragment(MainMenuFragment.class.getCanonicalName(), R.layout.layout_main_menu);
 		setLayoutForFragment(PhotoFragment.class.getCanonicalName(), R.layout.layout_pictures);
-		setLayoutForFragment(LastImpressionFragment.class.getCanonicalName(), R.layout.layout_last_impression);
-		setLayoutForFragment(TrailMapFragment.class.getCanonicalName(), R.layout.layout_trail_map);
+		setLayoutForFragment(LastImpressionFragment.class.getCanonicalName(), R.layout.layout_last_impression);		
 		return false;
 	}
 	

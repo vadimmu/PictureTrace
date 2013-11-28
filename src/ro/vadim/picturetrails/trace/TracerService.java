@@ -136,9 +136,6 @@ public class TracerService extends Service{
 							
 							Log.i("TracerService", "inserting a picture into the database");
 							db.insertPicture(picture);
-							Log.i("TracerService",  "last picture: ");
-							Log.i("TracerService",  db.getLastPicture().toJson());
-							
 							
 							if(picture != null){									
 								Intent pictureIntent = new Intent("ro.vadim.picturetrace.NewPicture");

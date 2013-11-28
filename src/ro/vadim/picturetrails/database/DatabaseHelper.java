@@ -207,7 +207,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	
 	public void clearPictures(){
 		SQLiteDatabase db = this.getReadableDatabase();
-		String deleteQuery = "DELETE * FROM "+TABLE_PICTURES;				
+		String deleteQuery = "DELETE FROM "+TABLE_PICTURES;				
 		db.execSQL(deleteQuery);
 	}
 }
